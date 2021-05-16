@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "245004442128",
+    "firebase_url": "https://find-my-way-81757-default-rtdb.firebaseio.com",
+    "project_id": "find-my-way-81757",
+    "storage_bucket": "find-my-way-81757.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245004442128:android:6971921f90d60972438895",
+        "android_client_info": {
+          "package_name": "com.example.findmyway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245004442128-eaj3p0g256emiv5h7bk8hn7rjdgvdccl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.findmyway",
+            "certificate_hash": "a2bce76f5673c72e43d45a9f48ca97cc3f7411cd"
+          }
+        },
+        {
+          "client_id": "245004442128-dhqbek73b5oe6368j7aulscenjv5pcbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo6eQA_cHdfj0SzgBz-9ZkXcA-JTzkhiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245004442128-dhqbek73b5oe6368j7aulscenjv5pcbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
