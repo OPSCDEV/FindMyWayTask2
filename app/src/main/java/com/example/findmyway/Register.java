@@ -35,14 +35,10 @@ public class Register extends AppCompatActivity {
         Password = findViewById(R.id.txtSUPassword);
         SignUp = findViewById(R.id.btContinue);
         Firebasedb = FirebaseDatabase.getInstance().getReference();
-        Firebasedb = Firebasedb.getParent().child("User");
+        Firebasedb = Firebasedb.child("User");
 
-        SignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserReg();
-            }
-        });
+        //SignIn.setOnClickListener(View);
+        SignUp.setOnClickListener(v -> UserReg());
     }
     private void UserReg()
     {
