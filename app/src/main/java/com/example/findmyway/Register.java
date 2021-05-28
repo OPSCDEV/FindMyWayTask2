@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
-    private DatabaseReference Firebasedb;
+    DatabaseReference Firebasedb;
     TextView Fname,Lname,Address,Email,Password;
     Button SignUp, SignIn;
     FirebaseAuth firebaseAuth;
@@ -36,6 +36,7 @@ public class Register extends AppCompatActivity {
         SignUp = findViewById(R.id.btContinue);
         Firebasedb = FirebaseDatabase.getInstance().getReference();
         Firebasedb = Firebasedb.child("User");
+        firebaseAuth = FirebaseAuth.getInstance();
 
         //SignIn.setOnClickListener(View);
         SignUp.setOnClickListener(v -> UserReg());
@@ -62,12 +63,12 @@ public class Register extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        startActivity(new Intent(Register.this, Profile.class));
+                        startActivity(new Intent(Register.this, Login.class));
                     }
                 });
 
                 String id = Firebasedb.push().getKey();
-                User doctorReg = new User(name, lname, address, email, password);
+                User doctorReg = new User(name, lname, address, email);
                 Firebasedb.child(id).setValue(doctorReg);
             }
             else{

@@ -14,7 +14,7 @@ public class Login extends AppCompatActivity {
     public EditText Email, Password;
     Button SignUp,SignIn;
     FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +64,12 @@ public class Login extends AppCompatActivity {
                         if(!(userEmail.isEmpty() && userPassword.isEmpty())){
                             firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(Login.this, (OnCompleteListener) task -> {
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Not successfull", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    startActivity(new Intent(Login.this, Profile.class));
+                                    Intent passSetting = new Intent(Login.this, Settings.class);
+                                    passSetting.putExtra("Email_Key",userEmail);
+                                    startActivity(passSetting);
+                                    //startActivity(new Intent(Login.this, Settings.class));
                                 }
                             });
                         }
@@ -78,9 +81,9 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-    @Override
-    protected void onStart(){
-        super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
-    }
+    //@Override
+    //protected void onStart(){
+        //super.onStart();
+        //firebaseAuth.addAuthStateListener(authStateListener);
+    //}
 }

@@ -1,15 +1,14 @@
 package com.example.findmyway;
 
 public class User {
-    String F_Name,L_Name,Address,Email,Password;
+    String F_Name,L_Name,Address,Email;
     public User(){}
 
-    public User(String f_Name, String l_Name, String address, String email, String password) {
+    public User(String f_Name, String l_Name, String address, String email) {
         this.F_Name = f_Name;
         this.L_Name = l_Name;
         this.Address = address;
         this.Email = email;
-        this.Password = password;
     }
 
     public String getF_Name() {
@@ -26,9 +25,5 @@ public class User {
 
     public String getUsername_Doc() {
         return Email;
-    }
-
-    public String getPassword_Doc() {
-        return Password;
     }
 }
