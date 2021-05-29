@@ -18,18 +18,19 @@
         app:layout_constraintVertical_bias="0.065"
         app:srcCompat="@drawable/findmywayicon" />
 
+
     <Button
         android:id="@+id/btprefernce"
-        android:layout_width="300dp"
-        android:layout_height="35dp"
+        android:layout_width="319dp"
+        android:layout_height="38dp"
         android:background="@android:color/holo_red_light"
         android:text="Continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.597"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.859" />
+        app:layout_constraintVertical_bias="0.835" />
 
     <TextView
         android:id="@+id/textView19"
@@ -40,10 +41,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
+        app:layout_constraintHorizontal_bias="0.348"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.336" />
+        app:layout_constraintVertical_bias="0.325" />
 
     <EditText
         android:id="@+id/txtDistancePref"
@@ -54,72 +55,10 @@
         android:textColor="@android:color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.561"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.735" />
-
-
-    <RadioButton
-        android:id="@+id/rbHistorical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Historical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413" />
-
-    <RadioButton
-        android:id="@+id/rbPopular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Popular"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.854"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413" />
-
-    <RadioButton
-        android:id="@+id/rbModern"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Modern"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413" />
-
-    <RadioButton
-        android:id="@+id/rbImperial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Imperial (miles)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.829"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64" />
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please select you prefered unit of distance"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.657"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.565" />
+        app:layout_constraintVertical_bias="0.73" />
 
     <EditText
         android:id="@+id/txtLandmarkPref"
@@ -130,22 +69,24 @@
         android:textColor="@android:color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.561"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.467" />
 
-    <RadioButton
-        android:id="@+id/rbMetric"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Metric (Km)"
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="351dp"
+        android:layout_height="24dp"
+        android:text="Please select you prefered unit of distance"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64" />
+        app:layout_constraintVertical_bias="0.553" />
 
     <TextView
         android:id="@+id/textView16"
@@ -160,5 +101,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.114" />
+
+    <RadioGroup
+        android:id="@+id/rgPreflandmark"
+        android:layout_width="256dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19">
+
+        <RadioButton
+            android:id="@+id/rbHistorical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:focusable="true"
+            android:text="Historical" />
+
+        <RadioButton
+            android:id="@+id/rbModern"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Modern" />
+
+        <RadioButton
+            android:id="@+id/rbPopular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Popular" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rgPrefDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/txtDistancePref"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView20">
+
+        <RadioButton
+            android:id="@+id/rbImperial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imperial (miles)" />
+
+        <RadioButton
+            android:id="@+id/rbMetric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Metric (Km)" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
