@@ -13,7 +13,20 @@
      mapbox:mapbox_cameraTargetLat="-26.103295842879"
      mapbox:mapbox_cameraTargetLng="27.904749363195958"
      mapbox:mapbox_styleUrl="mapbox://styles/mapbox/dark-v9"
-     mapbox:mapbox_cameraZoom="12"
-     />
+     mapbox:mapbox_cameraZoom="12">
+
+ </com.mapbox.mapboxsdk.maps.MapView>
+
+ <Button
+     android:id="@+id/btStart"
+     android:layout_width="371dp"
+     android:layout_height="38dp"
+     android:layout_marginBottom="24dp"
+     android:background="@color/mapboxGrayLight"
+     android:enabled="false"
+     android:text="FindMyWay"
+     mapbox:layout_constraintBottom_toBottomOf="parent"
+     mapbox:layout_constraintEnd_toEndOf="parent"
+     mapbox:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
