@@ -51,7 +51,7 @@ public class Settings extends AppCompatActivity {
             String selectedPrefLandmark;
             String selectedPrefDistance;
             if(historical.isChecked()){
-                 selectedPrefLandmark = "Historical";
+                 selectedPrefLandmark = "Historical test";
             }else if(modern.isChecked()){
                 selectedPrefLandmark = "Modern";
             }else{
