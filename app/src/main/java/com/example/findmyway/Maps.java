@@ -73,7 +73,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
         locationEngine.activate();
 
         Location lastLocation = locationEngine.getLastLocation();
-        if(!lastLocation.equals(null)){
+        if(lastLocation != null){
             originLocation = lastLocation;
             setCameraPosition(lastLocation);
         }else{
@@ -98,7 +98,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
     }
     @Override
     public void onLocationChanged(Location location) {
-        if(!location.equals(null)){
+        if(location != null){
             originLocation = location;
             setCameraPosition(location);
         }
