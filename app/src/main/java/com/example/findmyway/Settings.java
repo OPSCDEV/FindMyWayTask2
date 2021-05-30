@@ -71,19 +71,19 @@ public class Settings extends AppCompatActivity {
             prefLandmarks.setOnCheckedChangeListener((group, checkedId) -> {
                    //find which radioButton is checked by id
                 if(checkedId == R.id.rbHistorical) {
-                    prefLandmark.setText("You chose Historical");
+                    prefLandmark.setText("Historical");
                 } else if(checkedId == R.id.rbModern) {
-                    prefLandmark.setText("You chose Modern");
+                    prefLandmark.setText("Modern");
                 } else {
-                    prefLandmark.setText("You chose Popular");
+                    prefLandmark.setText("Popular");
                 }
             });
             prefUnits.setOnCheckedChangeListener((group, checkedId) -> {
                 // find which radioButton is checked by id
                 if(checkedId == R.id.rbMetric) {
-                    prefDistance.setText("You chose metric units");
+                    prefDistance.setText("Metric units");
                 } else {
-                    prefDistance.setText("You chose imperial units");
+                    prefDistance.setText("Imperial units");
                 }
             });
 
