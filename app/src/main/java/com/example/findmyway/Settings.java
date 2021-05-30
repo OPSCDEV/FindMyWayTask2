@@ -29,8 +29,8 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        prefLandmarks = (RadioGroup) findViewById(R.id.rgPreflandmark);
-        prefUnits = (RadioGroup) findViewById(R.id.rgPrefDistance);
+        prefLandmarks =  findViewById(R.id.rgPreflandmark);
+        prefUnits =findViewById(R.id.rgPrefDistance);
         historical = findViewById(R.id.rbHistorical);
         modern = findViewById(R.id.rbModern);
         popular = findViewById(R.id.rbPopular);
@@ -50,14 +50,14 @@ public class Settings extends AppCompatActivity {
 
             String selectedPrefLandmark;
             String selectedPrefDistance;
-            if(historical.isSelected()){
+            if(historical.isChecked()){
                  selectedPrefLandmark = "Historical";
-            }else if(modern.isSelected()){
+            }else if(modern.isChecked()){
                 selectedPrefLandmark = "Modern";
             }else{
                 selectedPrefLandmark = "Popular";
             }
-            if(metric.isSelected()){
+            if(metric.isChecked()){
                 selectedPrefDistance = "Kilometers";
             }else{
                 selectedPrefDistance = "Miles";
