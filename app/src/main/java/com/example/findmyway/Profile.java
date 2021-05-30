@@ -29,7 +29,7 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-         reference = FirebaseDatabase.getInstance().getReference("User");
+         reference = FirebaseDatabase.getInstance().getReference().child("User");
          referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
          Fname = findViewById(R.id.txtFirstname);
          Lname = findViewById(R.id.txtLastname);
@@ -37,27 +37,28 @@ public class Profile extends AppCompatActivity {
          Flocation = findViewById(R.id.txtFavlocations);
          landPref = findViewById(R.id.txtLandPref);
          unitPref = findViewById(R.id.txtLandPref);
-         FirebaseUser user;
-         String uid;
-         user = FirebaseAuth.getInstance().getCurrentUser();
-         uid = user.getUid();
+         //FirebaseUser user;
+         //String uid;
+         //user = FirebaseAuth.getInstance().getCurrentUser();
+        // uid = user.getUid();
             //ArrayList<String> arrayList = new ArrayList<>();
+        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference uDatabaseReference = FirebaseDatabase.getInstance().getReference().child("User");
 
-         reference.addValueEventListener(new ValueEventListener() {
+        uDatabaseReference.child(currentUid).addValueEventListener(new ValueEventListener() {
              @Override
-             public void onDataChange(DataSnapshot snapshot) {
-                 for(DataSnapshot datas: snapshot.getChildren()){
-                 String user_name = datas.child(uid).child("f_name").getValue(String.class);
-                 String user_surname = datas.child(uid).child("l_name").getValue(String.class);
-                 String user_address = datas.child(uid).child("address").getValue(String.class);
-                 String user_preflandmark = datas.child(uid).child("prefLandmark").getValue(String.class);
-                 String user_prefdistance = datas.child(uid).child("prefdistance").getValue(String.class);
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 String user_name = snapshot.child("f_Name").getValue().toString();
+                 String user_surname = snapshot.child("l_Name").getValue().toString();
+                 String user_address = snapshot.child("address").getValue().toString();
+                 //String user_preflandmark = datas.child(uid).child("prefLandmark").getValue().toString();
+                // String user_prefdistance = datas.child(uid).child("prefdistance").getValue().toString();
                  Fname.setText(user_name);
                  Lname.setText(user_surname);
-                 //address.setText(user_address);
-                 landPref.setText(user_preflandmark);
-                 unitPref.setText(user_prefdistance);
-             }
+                 address.setText(user_address);
+                // landPref.setText(user_preflandmark);
+                 //unitPref.setText(user_prefdistance);
+
              }
 
              @Override
