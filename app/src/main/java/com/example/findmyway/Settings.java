@@ -66,7 +66,8 @@ public class Settings extends AppCompatActivity {
             String id = Firebasedb.push().getKey();
             preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
             Firebasedb.child(id).setValue(preferences);
-
+            startActivity(new Intent(Settings.this, Profile.class));
+        });
             prefLandmarks.setOnCheckedChangeListener((group, checkedId) -> {
                    //find which radioButton is checked by id
                 if(checkedId == R.id.rbHistorical) {
@@ -85,8 +86,10 @@ public class Settings extends AppCompatActivity {
                     prefDistance.setText("You chose imperial units");
                 }
             });
-            startActivity(new Intent(Settings.this, Profile.class));
 
-        });
+
+
+
+
     }
 }
