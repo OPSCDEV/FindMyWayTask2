@@ -91,7 +91,7 @@ public class Login extends AppCompatActivity {
 
                                                 Intent passSetting;
                                                 if (stringifyUserEmail.matches(StringifyEmail)) {
-                                                    passSetting = new Intent(Login.this, Maps.class);
+                                                    passSetting = new Intent(Login.this, Profile.class);
                                                 } else {
                                                     Toast.makeText(Login.this, "Email Don't match", Toast.LENGTH_SHORT).show();
                                                     passSetting = new Intent(Login.this, Settings.class);

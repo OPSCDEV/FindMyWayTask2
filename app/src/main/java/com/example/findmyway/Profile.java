@@ -3,8 +3,11 @@ package com.example.findmyway;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,50 +26,71 @@ import org.jetbrains.annotations.NotNull;
 public class Profile extends AppCompatActivity {
 
     EditText address,Fname, Lname, Flocation, landPref, unitPref;
-    DatabaseReference reference,referencePref;
+    Button edit;
+    DatabaseReference referenceUser,referencePref;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-         reference = FirebaseDatabase.getInstance().getReference().child("User");
-         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
          Fname = findViewById(R.id.txtFirstname);
          Lname = findViewById(R.id.txtLastname);
          address = findViewById(R.id.txtAddress);
          Flocation = findViewById(R.id.txtFavlocations);
          landPref = findViewById(R.id.txtLandPref);
          unitPref = findViewById(R.id.txtLandPref);
-         //FirebaseUser user;
-         //String uid;
-         //user = FirebaseAuth.getInstance().getCurrentUser();
-        // uid = user.getUid();
-            //ArrayList<String> arrayList = new ArrayList<>();
-        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference uDatabaseReference = FirebaseDatabase.getInstance().getReference().child("User");
+         edit = findViewById(R.id.btEdit);
+         intent = getIntent();
+         String email = intent.getStringExtra("Email_Key");
+         String stringifyEmail = email.trim();
 
-        uDatabaseReference.child(currentUid).addValueEventListener(new ValueEventListener() {
-             @Override
-             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                 String user_name = snapshot.child("f_Name").getValue().toString();
-                 String user_surname = snapshot.child("l_Name").getValue().toString();
-                 String user_address = snapshot.child("address").getValue().toString();
-                 //String user_preflandmark = datas.child(uid).child("prefLandmark").getValue().toString();
-                // String user_prefdistance = datas.child(uid).child("prefdistance").getValue().toString();
-                 Fname.setText(user_name);
-                 Lname.setText(user_surname);
-                 address.setText(user_address);
-                // landPref.setText(user_preflandmark);
-                 //unitPref.setText(user_prefdistance);
+        referenceUser = FirebaseDatabase.getInstance().getReference("User");
+        referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
 
-             }
+        referenceUser.orderByChild("username_Doc").equalTo(stringifyEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot datas : snapshot.getChildren()) {
+                    String Fnamedb = datas.child("f_Name").getValue().toString();
+                    String Lnamedb = datas.child("l_Name").getValue().toString();
+                    String addressdb = datas.child("address").getValue().toString();
 
-             @Override
-             public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    Fname.setText(Fnamedb);
+                    Lname.setText(Lnamedb);
+                    address.setText(addressdb);
 
-             }
-         });
+                    Fname.setEnabled(false);
+                    Lname.setEnabled(false);
+                    address.setEnabled(false);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referencePref.orderByChild("email").equalTo(stringifyEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot datas : snapshot.getChildren()) {
+                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                    String prefdistancedb = datas.child("prefdistance").getValue().toString();
+
+                    landPref.setText(prefLandmarkdb);
+                    unitPref.setText(prefdistancedb);
+
+                    landPref.setEnabled(false);
+                    unitPref.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 }
