@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Profile extends AppCompatActivity {
 
-    EditText address,Fname, Lname, Flocation, landPref, unitPref;
+    EditText Uaddress,Fname, Lname, Flocation, landPref, unitPref;
     Button edit;
     DatabaseReference referenceUser,referencePref;
     Intent intent;
@@ -37,7 +37,7 @@ public class Profile extends AppCompatActivity {
 
          Fname = findViewById(R.id.txtFirstname);
          Lname = findViewById(R.id.txtLastname);
-         address = findViewById(R.id.txtAddress);
+         Uaddress = findViewById(R.id.txtAddress);
          Flocation = findViewById(R.id.txtFavlocations);
          landPref = findViewById(R.id.txtLandPref);
          unitPref = findViewById(R.id.txtLandPref);
@@ -59,11 +59,11 @@ public class Profile extends AppCompatActivity {
 
                     Fname.setText(Fnamedb);
                     Lname.setText(Lnamedb);
-                    address.setText(addressdb);
+                    Uaddress.setText(addressdb);
 
                     Fname.setEnabled(false);
                     Lname.setEnabled(false);
-                    address.setEnabled(false);
+                    Uaddress.setEnabled(false);
                 }
             }
 
