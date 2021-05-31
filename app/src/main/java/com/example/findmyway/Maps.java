@@ -4,14 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.location.Location;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-
-import com.google.firebase.database.core.persistence.PersistenceManager;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.location.LocationEnginePriority;
@@ -24,7 +20,6 @@ import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -65,7 +60,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(this,getString(R.string.access_token));
+        Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.activity_maps);
         startButton = findViewById(R.id.btStart);
         mapView = findViewById(R.id.mapView);
@@ -79,10 +74,10 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback, Locat
                     .shouldSimulateRoute(true)
                     .build();
 
-            NavigationLauncher.startNavigation(Maps.this,options);
+            NavigationLauncher.startNavigation(Maps.this, options);
         });
-
     }
+
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
         map = mapboxMap;

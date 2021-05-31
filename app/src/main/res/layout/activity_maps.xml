@@ -12,7 +12,7 @@
      android:layout_height="match_parent"
      mapbox:mapbox_cameraTargetLat="-26.103295842879"
      mapbox:mapbox_cameraTargetLng="27.904749363195958"
-     mapbox:mapbox_styleUrl="mapbox://styles/mapbox/dark-v9"
+     mapbox:mapbox_styleUrl="mapbox://styles/mapbox/navigation-night-v1"
      mapbox:mapbox_cameraZoom="12">
 
  </com.mapbox.mapboxsdk.maps.MapView>
