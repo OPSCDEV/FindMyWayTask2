@@ -1,25 +1,27 @@
 package com.example.findmyway;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
@@ -27,6 +29,10 @@ public class Login extends AppCompatActivity {
     private Button SignUp,SignIn;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+
+    private static final String TAG = "MainActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
+
     DatabaseReference reference;
 
     @Override
@@ -43,22 +49,39 @@ public class Login extends AppCompatActivity {
 
         reference = FirebaseDatabase.getInstance().getReference("User_Pref");
 
-        authStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if(user != null){
-                Toast.makeText(Login.this, "User logged in", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(Login.this, "Login to continue", Toast.LENGTH_SHORT).show();
-            }
-        };
+        if(isServiceOkay()){
+            getAuth();
+            SignUpUser();
+            init();
+        }
+    }
 
-        SignUp.setOnClickListener(v -> {
-            Intent intent = new Intent(Login.this, Register.class);
-            startActivity(intent);
-        });
+    //To load Maps
+    private void init(){
+        checkUser();
+    }
+    public boolean isServiceOkay(){
+        Log.d(TAG, "isServiceOkay: checking google services version");
+        int availible = GoogleApiAvailability
+                .getInstance()
+                .isGooglePlayServicesAvailable(this);
+        if(availible== ConnectionResult.SUCCESS){
+            Log.d(TAG, "isServiceOkay: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(availible)){
+            Log.d(TAG, "isServiceOkay: an error occurred we can fix it ");
+            Dialog dialog = GoogleApiAvailability
+                    .getInstance()
+                    .getErrorDialog(this,availible,ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this,"You can't Make map request",Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
 
+    private void checkUser(){
         SignIn.setOnClickListener(v -> {
             String userEmail = Email.getText().toString().trim();
             String userPassword = Password.getText().toString().trim();
@@ -80,32 +103,27 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "Not successful", Toast.LENGTH_SHORT).show();
                                 } else {
 
-                                    reference.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    //Checks if user records exist
+                                    reference.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
                                         @Override
-                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                            for(DataSnapshot datas: snapshot.getChildren()) {
-                                                String email = datas.child("email").getValue().toString().trim();
-
-                                                String StringifyEmail = email;
-                                                String stringifyUserEmail = userEmail;
-
-                                                Intent passSetting;
-                                                if (stringifyUserEmail.matches(StringifyEmail)) {
-                                                    passSetting = new Intent(Login.this, Profile.class);
-                                                } else {
-                                                    Toast.makeText(Login.this, "Email Don't match", Toast.LENGTH_SHORT).show();
-                                                    passSetting = new Intent(Login.this, Settings.class);
-                                                }
-                                                passSetting.putExtra("Email_Key", userEmail);
-                                                startActivity(passSetting);
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()){
+                                                Toast.makeText(Login.this, "loading profile...", Toast.LENGTH_SHORT).show();
+                                                CheckUserPref(userEmail);
                                             }
-                                        }
+                                            else{
+                                                Toast.makeText(Login.this, "you don't have a pref", Toast.LENGTH_SHORT).show();
+                                                Intent intent =new Intent(Login.this, Settings.class);
+                                                startActivity(intent);
+                                            }
 
+                                        }
                                         @Override
-                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                        public void onCancelled(DatabaseError databaseError) {
 
                                         }
                                     });
+
                                 }
                             });
                         }
@@ -114,6 +132,56 @@ public class Login extends AppCompatActivity {
                         }
                     }
                 }
+            }
+        });
+    }
+    private void getAuth(){
+        authStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if(user != null){
+                Toast.makeText(Login.this, "User logged in", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(Login.this, "Login to continue", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+    private void SignUpUser(){
+        SignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, Register.class);
+            startActivity(intent);
+        });
+    }
+    private void CheckUserPref(String useremail){
+        reference.orderByChild("email").equalTo(useremail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot datas: snapshot.getChildren()) {
+
+                    String email = datas.child("email").getValue().toString().trim();
+
+                    String StringifyEmail = email;
+                    String stringifyUserEmail = useremail;
+
+                    Intent passSetting;
+                    if (stringifyUserEmail.matches(StringifyEmail)) {
+                        passSetting = new Intent(Login.this, Profile.class);
+                        passSetting.putExtra("Email_Key", useremail);
+                        startActivity(passSetting);
+                    } else{
+                        Toast.makeText(Login.this, "emails dont match", Toast.LENGTH_SHORT).show();
+                    }
+                    //else {
+                    //Toast.makeText(Login.this, "Email Don't match", Toast.LENGTH_SHORT).show();
+                    //passSetting = new Intent(Login.this, Settings.class);
+                    //}
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Log.d(TAG, "onCancelled: Error null references");
             }
         });
     }

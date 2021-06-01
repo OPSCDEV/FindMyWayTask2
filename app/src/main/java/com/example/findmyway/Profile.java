@@ -38,9 +38,12 @@ public class Profile extends AppCompatActivity {
          Fname = findViewById(R.id.txtFirstname);
          Lname = findViewById(R.id.txtLastname);
          Uaddress = findViewById(R.id.txtAddressp);
+
          Flocation = findViewById(R.id.txtFavlocations);
+
          landPref = findViewById(R.id.txtLandPref);
-         unitPref = findViewById(R.id.txtLandPref);
+         unitPref = findViewById(R.id.txtprefUnit);
+
          edit = findViewById(R.id.btEdit);
          intent = getIntent();
          String email = intent.getStringExtra("Email_Key");
@@ -49,7 +52,14 @@ public class Profile extends AppCompatActivity {
         referenceUser = FirebaseDatabase.getInstance().getReference("User");
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
 
-        referenceUser.orderByChild("username_Doc").equalTo(stringifyEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+        //Works
+        getUserDetails(stringifyEmail);
+        //works
+        getUserPref(stringifyEmail);
+    }
+    private void getUserDetails(String email){
+        //Works
+        referenceUser.orderByChild("username_Doc").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
@@ -64,6 +74,7 @@ public class Profile extends AppCompatActivity {
                     Fname.setEnabled(false);
                     Lname.setEnabled(false);
                     Uaddress.setEnabled(false);
+                    Flocation.setEnabled(false);
                 }
             }
 
@@ -72,11 +83,13 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-        referencePref.orderByChild("email").equalTo(stringifyEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+    }
+    private void getUserPref(String email){
+        referencePref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
-                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString().trim();
+                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
                     String prefdistancedb = datas.child("prefdistance").getValue().toString();
 
                     landPref.setText(prefLandmarkdb);
