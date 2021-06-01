@@ -67,7 +67,7 @@ public class Profile extends AppCompatActivity {
                     String Lnamedb = datas.child("l_Name").getValue().toString();
                     String addressdb = datas.child("address").getValue().toString();
 
-                    Fname.setText(Fnamedb);
+                    Fname.setText(Fnamedb + " " + Lnamedb);
                     Uaddress.setText(addressdb);
 
                     Fname.setEnabled(false);
