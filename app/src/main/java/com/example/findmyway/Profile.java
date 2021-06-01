@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class Profile extends AppCompatActivity {
 
     EditText Uaddress,Fname,  landPref, unitPref;
-    Button edit;
+    Button edit, save;
     DatabaseReference referenceUser,referencePref;
     Intent intent;
     Spinner Flocation;
@@ -45,18 +45,55 @@ public class Profile extends AppCompatActivity {
          unitPref = findViewById(R.id.txtprefUnit);
 
          edit = findViewById(R.id.btEdit);
+         save = findViewById(R.id.btSave);
          intent = getIntent();
          String email = intent.getStringExtra("Email_Key");
-         String stringifyEmail = email.trim();
+         String stringifyEmail = email;
 
         referenceUser = FirebaseDatabase.getInstance().getReference("User");
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+        String uid = currentFirebaseUser.getUid();
 
         //Works
         getUserDetails(stringifyEmail);
         //works
         getUserPref(stringifyEmail);
-    }
+        edit.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Fname.setEnabled(true);
+                Uaddress.setEnabled(true);
+                Flocation.setEnabled(true);
+                landPref.setEnabled(true);
+                unitPref.setEnabled(true);
+
+            }
+        });
+        save.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+               String fullname = "";
+               fullname = Fname.getText().toString();
+                String frstnme = "";
+                String lstnme = "";
+                String[] split = fullname.split(" ");
+                frstnme = split[0];
+                lstnme = split[1];
+                referenceUser.child(uid).child("f_Name").setValue(frstnme);
+                referenceUser.child(uid).child("l_Name").setValue(lstnme);
+                referencePref.child(uid).child("prefDistance").setValue(landPref.getText().toString());
+                referencePref.child(uid).child("prefLandmark").setValue(unitPref.getText().toString());
+                Fname.setEnabled(false);
+                Uaddress.setEnabled(false);
+                Flocation.setEnabled(false);
+                landPref.setEnabled(false);
+                unitPref.setEnabled(false);
+
+            }
+        });}
     private void getUserDetails(String email){
         //Works
         referenceUser.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -104,4 +141,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+
+
 }
