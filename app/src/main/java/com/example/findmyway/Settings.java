@@ -46,6 +46,9 @@ public class Settings extends AppCompatActivity {
         intent = getIntent();
         String email = intent.getStringExtra("Email_Key");
 
+        prefLandmark.setEnabled(false);
+        prefDistance.setEnabled(false);
+
         _continue.setOnClickListener(v -> {
 
             String selectedPrefLandmark;
@@ -72,6 +75,7 @@ public class Settings extends AppCompatActivity {
                    //find which radioButton is checked by id
                 if(checkedId == R.id.rbHistorical) {
                     prefLandmark.setText("Historical");
+                    prefLandmark.setEnabled(false);
                 } else if(checkedId == R.id.rbModern) {
                     prefLandmark.setText("Modern");
                 } else {

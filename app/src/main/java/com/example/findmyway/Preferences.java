@@ -14,23 +14,12 @@ public class Preferences {
         return prefLandmark;
     }
 
-    public void setPrefLandmark(String prefLandmark) {
-        this.prefLandmark = prefLandmark;
-    }
-
-    public String getPrefdistance() {
+    public String getPrefDistance() {
         return prefdistance;
-    }
-
-    public void setPrefdistance(String prefdistance) {
-        this.prefdistance = prefdistance;
     }
 
     public String getEmail() {
         return Email;
     }
 
-    public void setEmail(String email) {
-        Email = email;
-    }
 }

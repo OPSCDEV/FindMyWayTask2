@@ -59,7 +59,7 @@ public class Profile extends AppCompatActivity {
     }
     private void getUserDetails(String email){
         //Works
-        referenceUser.orderByChild("username_Doc").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceUser.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
@@ -90,7 +90,7 @@ public class Profile extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
                     String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
-                    String prefdistancedb = datas.child("prefdistance").getValue().toString();
+                    String prefdistancedb = datas.child("prefDistance").getValue().toString();
 
                     landPref.setText(prefLandmarkdb);
                     unitPref.setText(prefdistancedb);

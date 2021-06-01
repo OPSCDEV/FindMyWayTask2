@@ -56,7 +56,6 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    //To load Maps
     private void init(){
         checkUser();
     }
@@ -113,8 +112,9 @@ public class Login extends AppCompatActivity {
                                             }
                                             else{
                                                 Toast.makeText(Login.this, "you don't have a pref", Toast.LENGTH_SHORT).show();
-                                                Intent intent =new Intent(Login.this, Settings.class);
-                                                startActivity(intent);
+                                                Intent passSetting =new Intent(Login.this, Settings.class);
+                                                passSetting.putExtra("Email_Key", userEmail);
+                                                startActivity(passSetting);
                                             }
 
                                         }
@@ -172,10 +172,6 @@ public class Login extends AppCompatActivity {
                     } else{
                         Toast.makeText(Login.this, "emails dont match", Toast.LENGTH_SHORT).show();
                     }
-                    //else {
-                    //Toast.makeText(Login.this, "Email Don't match", Toast.LENGTH_SHORT).show();
-                    //passSetting = new Intent(Login.this, Settings.class);
-                    //}
                 }
             }
 

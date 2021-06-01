@@ -23,7 +23,7 @@ public class User {
         return Address;
     }
 
-    public String getUsername_Doc() {
+    public String getEmail() {
         return Email;
     }
 }
