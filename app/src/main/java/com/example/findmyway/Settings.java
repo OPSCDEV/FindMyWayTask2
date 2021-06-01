@@ -90,10 +90,5 @@ public class Settings extends AppCompatActivity {
                     prefDistance.setText("Imperial units");
                 }
             });
-
-
-
-
-
     }
 }
