@@ -37,7 +37,7 @@ public class Profile extends AppCompatActivity {
 
          Fname = findViewById(R.id.txtFirstname);
          Lname = findViewById(R.id.txtLastname);
-         Uaddress = findViewById(R.id.txtAddress);
+         Uaddress = findViewById(R.id.txtAddressp);
          Flocation = findViewById(R.id.txtFavlocations);
          landPref = findViewById(R.id.txtLandPref);
          unitPref = findViewById(R.id.txtLandPref);
@@ -76,7 +76,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
-                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString().trim();
                     String prefdistancedb = datas.child("prefdistance").getValue().toString();
 
                     landPref.setText(prefLandmarkdb);
