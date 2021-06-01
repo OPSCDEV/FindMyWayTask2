@@ -25,10 +25,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Profile extends AppCompatActivity {
 
-    EditText Uaddress,Fname, Lname, Flocation, landPref, unitPref;
+    EditText Uaddress,Fname,  landPref, unitPref;
     Button edit;
     DatabaseReference referenceUser,referencePref;
     Intent intent;
+    Spinner Flocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +37,9 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
          Fname = findViewById(R.id.txtFirstname);
-         Lname = findViewById(R.id.txtLastname);
          Uaddress = findViewById(R.id.txtAddressp);
 
-         Flocation = findViewById(R.id.txtFavlocations);
+         Flocation = findViewById(R.id.spnFavlocations);
 
          landPref = findViewById(R.id.txtLandPref);
          unitPref = findViewById(R.id.txtprefUnit);
@@ -68,11 +68,9 @@ public class Profile extends AppCompatActivity {
                     String addressdb = datas.child("address").getValue().toString();
 
                     Fname.setText(Fnamedb);
-                    Lname.setText(Lnamedb);
                     Uaddress.setText(addressdb);
 
                     Fname.setEnabled(false);
-                    Lname.setEnabled(false);
                     Uaddress.setEnabled(false);
                     Flocation.setEnabled(false);
                 }
