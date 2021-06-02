@@ -63,7 +63,7 @@ public class Profile extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Fname.setEnabled(true);
+                //Fname.setEnabled(true);
                 Uaddress.setEnabled(true);
                 Flocation.setEnabled(true);
                 landPref.setEnabled(true);
@@ -71,28 +71,17 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-        save.setOnClickListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-               String fullname = "";
-               fullname = Fname.getText().toString();
-                String frstnme = "";
-                String lstnme = "";
-                String[] split = fullname.split(" ");
-                frstnme = split[0];
-                lstnme = split[1];
-                referenceUser.child(uid).child("f_Name").setValue(frstnme);
-                referenceUser.child(uid).child("l_Name").setValue(lstnme);
-                referencePref.child(uid).child("prefDistance").setValue(landPref.getText().toString());
-                referencePref.child(uid).child("prefLandmark").setValue(unitPref.getText().toString());
-                Fname.setEnabled(false);
-                Uaddress.setEnabled(false);
-                Flocation.setEnabled(false);
-                landPref.setEnabled(false);
-                unitPref.setEnabled(false);
-
-            }
+        save.setOnClickListener(v -> {
+            referenceUser.orderByChild("email").equalTo(email);
+            referencePref.orderByChild("email").equalTo(email);
+            referenceUser.child("address").setValue(Uaddress.getText().toString());
+            referencePref.child("prefDistance").setValue(landPref.getText().toString());
+            referencePref.child("prefLandmark").setValue(unitPref.getText().toString());
+            Fname.setEnabled(false);
+            Uaddress.setEnabled(false);
+            Flocation.setEnabled(false);
+            landPref.setEnabled(false);
+            unitPref.setEnabled(false);
         });}
     private void getUserDetails(String email){
         //Works
@@ -104,7 +93,7 @@ public class Profile extends AppCompatActivity {
                     String Lnamedb = datas.child("l_Name").getValue().toString();
                     String addressdb = datas.child("address").getValue().toString();
 
-                    Fname.setText(Fnamedb + " " + Lnamedb);
+                   Fname.setText(Fnamedb + " " + Lnamedb);
                     Uaddress.setText(addressdb);
 
                     Fname.setEnabled(false);
