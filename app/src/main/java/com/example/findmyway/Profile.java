@@ -72,16 +72,25 @@ public class Profile extends AppCompatActivity {
             }
         });
         save.setOnClickListener(v -> {
-            referenceUser.orderByChild("email").equalTo(email);
-            referencePref.orderByChild("email").equalTo(email);
-            referenceUser.child("address").setValue(Uaddress.getText().toString());
-            referencePref.child("prefDistance").setValue(landPref.getText().toString());
-            referencePref.child("prefLandmark").setValue(unitPref.getText().toString());
-            Fname.setEnabled(false);
-            Uaddress.setEnabled(false);
-            Flocation.setEnabled(false);
-            landPref.setEnabled(false);
-            unitPref.setEnabled(false);
+            referenceUser.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    snapshot.getRef().child("address").setValue(Uaddress.getText().toString());
+                    snapshot.getRef().child("prefDistance").setValue(landPref.getText().toString());
+                    snapshot.getRef().child("prefLandmark").setValue(unitPref.getText().toString());
+                    Fname.setEnabled(false);
+                    Uaddress.setEnabled(false);
+                    Flocation.setEnabled(false);
+                    landPref.setEnabled(false);
+                    unitPref.setEnabled(false);
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+
         });}
     private void getUserDetails(String email){
         //Works
