@@ -1,5 +1,16 @@
 package com.example.findmyway;
 
+import androidx.fragment.app.FragmentActivity;
+
+import android.os.Bundle;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.findmyway.databinding.ActivityMaps2Binding;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -39,7 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Maps extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private static final String TAG = "MainActivity";
     private boolean mLocationPermissionGranted = false;
@@ -62,11 +73,11 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyAR-wQc4ixFYXridK_lvfAhOv-XnkrE8HY");
+            Places.initialize(getApplicationContext(), "@string/API_KEY");
         }
 
 // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(Maps.this);
+        PlacesClient placesClient = Places.createClient(MapsActivity.this);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -122,7 +133,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                                 , "My Location");
                     } else {
                         Log.d(TAG, "onComplete: current location is null");
-                        Toast.makeText(Maps.this, "Can't find current location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "Can't find current location", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -155,7 +166,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         Log.d(TAG, "geoLocate: locating");
         String searchstring = this.searchString;
 
-        Geocoder geocoder = new Geocoder(Maps.this);
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = new ArrayList<>();
         try{
             list = geocoder.getFromLocationName(searchstring,1);
@@ -194,7 +205,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(Maps.this);
+        mapFragment.getMapAsync(MapsActivity.this);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -214,7 +225,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     Log.d(TAG, "onRequestPermissionsResult: Permission Granted");
                     mLocationPermissionGranted = true;
 
-        }
+                }
             }
         }
     }
