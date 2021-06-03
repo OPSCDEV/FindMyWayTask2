@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import android.widget.AutoCompleteTextView;
 
 
 public class Maps extends AppCompatActivity implements OnMapReadyCallback {
@@ -49,6 +51,9 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    public String plce;
+
+
 
 
     @Override
@@ -67,18 +72,16 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         }
 
 // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(Maps.this);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                addMarker(place);
+                plce = place.getName().toString();
             }
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                Log.d("Maps", "An error occurred: " + status);
             }
         });
     }
@@ -86,6 +89,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        getLocationPermission();
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         if (mLocationPermissionGranted) {
@@ -103,13 +107,14 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             init();
         }
         mMap = googleMap;
+
     }
 
 
     private void getDeviceLocation() {
         Log.d(TAG, "getLocation: getting the current location");
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Maps.this);
         try {
             if (mLocationPermissionGranted) {
                 Task location = mFusedLocationProviderClient.getLastLocation();
@@ -145,16 +150,11 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     }
     public void init(){
         Log.d(TAG, "init: initializing");
-        AutocompleteSupportFragment autocompletefragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        View frag= autocompletefragment.getView();
-        EditText editText1 = (EditText) frag.findViewById(R.id.message);
-        String message=editText1.getText().toString();
-        searchString = message;
         geoLocate();
     }
     private  void geoLocate(){
         Log.d(TAG, "geoLocate: locating");
-        String searchstring = this.searchString;
+        String searchstring = this.plce;
 
         Geocoder geocoder = new Geocoder(Maps.this);
         List<Address> list = new ArrayList<>();
@@ -218,5 +218,17 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         }
+    }
+    public void addMarker(Place p){
+
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        markerOptions.position(p.getLatLng());
+        markerOptions.title(p.getName()+"");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        mMap.addMarker(markerOptions);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(p.getLatLng()));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
     }
 }
