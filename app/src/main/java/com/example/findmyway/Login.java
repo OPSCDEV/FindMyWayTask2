@@ -166,7 +166,7 @@ public class Login extends AppCompatActivity {
 
                     Intent passSetting;
                     if (stringifyUserEmail.matches(StringifyEmail)) {
-                        passSetting = new Intent(Login.this, Profile.class);
+                        passSetting = new Intent(Login.this,  Maps.class);
                         passSetting.putExtra("Email_Key", useremail);
                         startActivity(passSetting);
                     } else{
