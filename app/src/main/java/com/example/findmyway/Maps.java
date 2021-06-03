@@ -62,7 +62,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyAR-wQc4ixFYXridK_lvfAhOv-XnkrE8HY");
+            Places.initialize(getApplicationContext(), "@string/API_KEY");
+
         }
 
 // Create a new Places client instance.
@@ -214,7 +215,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     Log.d(TAG, "onRequestPermissionsResult: Permission Granted");
                     mLocationPermissionGranted = true;
 
-        }
+                }
             }
         }
     }
