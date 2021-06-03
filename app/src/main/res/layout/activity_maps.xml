@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"
-    ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -12,19 +11,22 @@
      android:id="@+id/map"
     tools:context=".MapsActivity"
      android:name="com.google.android.gms.maps.SupportMapFragment" />
+
  <fragment android:id="@+id/autocomplete_fragment"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-     />
+     android:hint="Enter address , City, Zip Code"
+     android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
 
  <RelativeLayout
-     android:id="@+id/rellayout1"
      android:layout_width="match_parent"
      android:layout_height="50dp"
-     android:layout_marginBottom="680dp"
+     android:layout_marginTop="10dp"
+     android:layout_marginRight="10dp"
+     android:layout_marginLeft="10dp"
+     android:elevation="10dp"
      android:background="@drawable/white_border"
-     android:elevation="10dp">
+     android:id="@+id/relLayout1">
 
   <ImageView
       android:id="@+id/ic_magnify"
@@ -34,21 +36,29 @@
       android:layout_marginLeft="10dp"
       android:src="@drawable/ic_magnify" />
 
-
-  <!--  <EditText-->
-  <!--      android:layout_width="match_parent"-->
-  <!--      android:layout_height="match_parent"-->
-  <!--      android:layout_toRightOf="@+id/ic_magnify"-->
-  <!--      android:layout_centerVertical="true"-->
-  <!--      android:textSize="15sp"-->
-  <!--      android:textColor="#000"-->
-  <!--      android:id="@+id/input_search"-->
-  <!--      android:background="@null"-->
-  <!--      android:hint="Enter Address, City or Zip Code"-->
-  <!--      android:imeOptions="actionSearch"/>-->
-
  </RelativeLayout>
 
+ <ImageView
+     android:id="@+id/ic_profile"
+     android:layout_width="60dp"
+     android:layout_height="60dp"
+     android:layout_below="@id/relLayout1"
+     android:layout_alignParentRight="true"
+     android:layout_marginRight="10dp"
+     android:layout_marginTop="10dp"
+     android:scaleType="centerCrop"
+     android:src="@drawable/ic_profile" />
+
+ <ImageView
+     android:id="@+id/ic_favlocation"
+     android:layout_width="60dp"
+     android:layout_height="60dp"
+     android:layout_below="@id/relLayout1"
+     android:layout_alignParentRight="false"
+     android:layout_marginRight="10dp"
+     android:layout_marginTop="10dp"
+     android:scaleType="centerCrop"
+     android:src="@drawable/ic_fav_location" />
 
 
 </RelativeLayout>
