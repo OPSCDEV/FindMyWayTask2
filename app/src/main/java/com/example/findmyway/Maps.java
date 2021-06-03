@@ -52,6 +52,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public String plce;
+    private final String apikey = "AIzaSyAR-wQc4ixFYXridK_lvfAhOv-XnkrE8HY";
 
 
 
@@ -60,6 +61,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
@@ -67,7 +69,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "@string/API_KEY");
+            Places.initialize(getApplicationContext(), apikey);
 
         }
 
@@ -76,7 +78,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onPlaceSelected(Place place) {
                 addMarker(place);
-                plce = place.getName().toString();
+                plce = place.getName();
             }
 
             @Override
@@ -84,6 +86,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 Log.d("Maps", "An error occurred: " + status);
             }
         });
+        getDeviceLocation();
     }
 
 
@@ -100,10 +103,10 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
             mMap.setMyLocationEnabled(true);
             //Try the other cool settings  getUiSettings()
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
             init();
         }
         mMap = googleMap;
@@ -135,6 +138,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         } catch (SecurityException e) {
             Log.d(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
+
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {

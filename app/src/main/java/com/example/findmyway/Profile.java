@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class Profile extends AppCompatActivity {
     DatabaseReference referenceUser,referencePref;
     Intent intent;
     Spinner Flocation;
+    Query refQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,47 +53,24 @@ public class Profile extends AppCompatActivity {
          String stringifyEmail = email;
 
         referenceUser = FirebaseDatabase.getInstance().getReference("User");
+        refQuery = referenceUser.orderByChild("email").equalTo(email);
+
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
-        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
-        String uid = currentFirebaseUser.getUid();
 
-        //Works
+        //FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+        //String uid = currentFirebaseUser.getUid();
+
         getUserDetails(stringifyEmail);
-        //works
         getUserPref(stringifyEmail);
-        edit.setOnClickListener( new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                //Fname.setEnabled(true);
-                Uaddress.setEnabled(true);
-                Flocation.setEnabled(true);
-                landPref.setEnabled(true);
-                unitPref.setEnabled(true);
-
-            }
+        edit.setOnClickListener(v -> {
+            EnableText();
         });
+
         save.setOnClickListener(v -> {
-            referenceUser.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    snapshot.getRef().child("address").setValue(Uaddress.getText().toString());
-                    snapshot.getRef().child("prefDistance").setValue(landPref.getText().toString());
-                    snapshot.getRef().child("prefLandmark").setValue(unitPref.getText().toString());
-                    Fname.setEnabled(false);
-                    Uaddress.setEnabled(false);
-                    Flocation.setEnabled(false);
-                    landPref.setEnabled(false);
-                    unitPref.setEnabled(false);
-                }
-
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                }
-            });
-
+            SaveChanges(email);
         });}
+
     private void getUserDetails(String email){
         //Works
         referenceUser.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -139,6 +118,23 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+    private void SaveChanges(String email){
 
+                refQuery.getRef().child("address").setValue(Uaddress.getText().toString());
+                referencePref.child("prefDistance").setValue(landPref.getText().toString());
+                referencePref.child("prefLandmark").setValue(unitPref.getText().toString());
 
+                Fname.setEnabled(false);
+                Uaddress.setEnabled(false);
+                Flocation.setEnabled(false);
+                landPref.setEnabled(false);
+                unitPref.setEnabled(false);
+
+    }
+    private void EnableText(){
+        Uaddress.setEnabled(true);
+        Flocation.setEnabled(true);
+        landPref.setEnabled(true);
+        unitPref.setEnabled(true);
+    }
 }
