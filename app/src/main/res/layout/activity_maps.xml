@@ -8,12 +8,6 @@
     android:orientation="vertical"
     tools:context=".Maps">
 
- <Button
-     android:id="@+id/btnProfile"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:text="Profile" />
-
  <LinearLayout
      android:id="@+id/relLayout1"
      android:layout_width="match_parent"

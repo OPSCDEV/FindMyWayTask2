@@ -101,7 +101,10 @@ public class Settings extends AppCompatActivity {
             String id = Firebasedb.push().getKey();
             preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
             Firebasedb.child(a).setValue(preferences);
-            startActivity(new Intent(Settings.this, Maps.class));
+            Intent passSetting = new Intent(this, Maps.class);
+            passSetting.putExtra("PrefLandmark_Key",selectedPrefDistance );
+            startActivity(passSetting);
+            //startActivity(new Intent(Settings.this, Maps.class));
         });
     }
 }

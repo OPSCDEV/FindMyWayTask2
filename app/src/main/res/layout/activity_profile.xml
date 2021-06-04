@@ -161,19 +161,18 @@
         android:id="@+id/spnFavlocations"
         android:layout_width="349dp"
         android:layout_height="39dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFavlocations"
-        app:layout_constraintVertical_bias="0.061" />
+        app:layout_constraintVertical_bias="0.107" />
 
     <Spinner
         android:id="@+id/spnPrefUnit"
         android:layout_width="349dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="256dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvFavlocations"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
@@ -183,10 +182,9 @@
         android:id="@+id/spnlandPref"
         android:layout_width="349dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="344dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvPrefUnit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPreflandmark" />
 

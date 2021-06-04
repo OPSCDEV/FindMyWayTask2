@@ -107,7 +107,7 @@ public class Profile extends AppCompatActivity {
                     landPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, lPref));
                     String[] uPref = new String[]{"Kilometers", "Miles"};
                     unitPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, uPref));
-                    //String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
 
                     landPref.setEnabled(false);
                     unitPref.setEnabled(false);
@@ -123,6 +123,7 @@ public class Profile extends AppCompatActivity {
     private void SavePrefUser(){
         Register a1 = new Register();
         String a = a1.uid;
+
         referencePref.child(a).child("prefDistance").setValue(unitPref.getItemAtPosition(unitPref.getSelectedItemPosition()).toString());
         referencePref.child(a).child("prefLandmark").setValue(landPref.getItemAtPosition(landPref.getSelectedItemPosition()).toString());
         landPref.setEnabled(false);
@@ -130,9 +131,13 @@ public class Profile extends AppCompatActivity {
         Fname.setEnabled(false);
         Uaddress.setEnabled(false);
         Flocation.setEnabled(false);
+        TextView textView = (TextView)landPref.getSelectedView();
+        String result = textView.getText().toString();
+        Intent passSetting = new Intent(this, Maps.class);
+        /*passSetting.putExtra("selectedLand", result );
+        startActivity(passSetting);*/
     }
     private void EnableText(){
-        Uaddress.setEnabled(true);
         Flocation.setEnabled(true);
         landPref.setEnabled(true);
         unitPref.setEnabled(true);

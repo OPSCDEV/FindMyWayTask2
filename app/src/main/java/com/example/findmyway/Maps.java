@@ -82,25 +82,26 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         intent = getIntent();
         String email = intent.getStringExtra("Email_Key");
         String preflandmark = intent.getStringExtra("PrefLandmark_Key");
+        String prefmark = intent.getStringExtra("selectedLand");
 
         getLocationPermission();
         spType = findViewById(R.id.sp_type);
         btFind = findViewById(R.id.bt_find);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
-        if(preflandmark.equals("Historical")){
+        if( preflandmark.equals("Historical") /*|| (prefmark.equals("Historical"))*/){
             String[] placeTypeList = new String[]{"museum", "library", "monument"};
             String[] placeNameList = new String[]{"Museum", "Library", "Monument"};
             spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
             GetPlaces(placeTypeList);
         }else{
-            if(preflandmark.equals("Modern")){
-                String[] placeTypeList = new String[]{};
-                String[] placeNameList = new String[]{};
+            if(preflandmark.equals("Modern")/*|| (prefmark.equals("Modern"))*/){
+                String[] placeTypeList = new String[]{"natural_feature","landmark", "tourist_attraction"};
+                String[] placeNameList = new String[]{"Natural Features", "Local Landmarks", "Tourist Attractions"};
                 spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                 GetPlaces(placeTypeList);
             }else{
-                if(preflandmark.equals("Popular")){
+                if(preflandmark.equals("Popular")/*|| (prefmark.equals("Popular"))*/){
                     String[] placeTypeList = new String[]{"restaurant", "cafe", "park","night_club"};
                     //Display
                     String[] placeNameList = new String[]{"Restaurant", "Cafe", "Park","Night Club"};
