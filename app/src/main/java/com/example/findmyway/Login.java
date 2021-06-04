@@ -160,15 +160,22 @@ public class Login extends AppCompatActivity {
                 for(DataSnapshot datas: snapshot.getChildren()) {
 
                     String email = datas.child("email").getValue().toString().trim();
+                    String prefLandmark = datas.child("prefLandmark").getValue().toString();
 
                     String StringifyEmail = email;
                     String stringifyUserEmail = useremail;
 
                     Intent passSetting;
                     if (stringifyUserEmail.matches(StringifyEmail)) {
-                        passSetting = new Intent(Login.this,  Maps.class);
+                        passSetting = new Intent(Login.this, Maps.class);
+
                         passSetting.putExtra("Email_Key", useremail);
+                        passSetting.putExtra("PrefLandmark_Key",prefLandmark);
+
+                        Log.d(TAG, "onDataChange: prefadded");
+                        
                         startActivity(passSetting);
+                        
                     } else{
                         Toast.makeText(Login.this, "emails dont match", Toast.LENGTH_SHORT).show();
                     }

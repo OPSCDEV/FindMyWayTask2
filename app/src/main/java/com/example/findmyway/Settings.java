@@ -69,7 +69,9 @@ public class Settings extends AppCompatActivity {
             String id = Firebasedb.push().getKey();
             preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
             Firebasedb.child(id).setValue(preferences);
-            startActivity(new Intent(Settings.this, Maps.class));
+
+            intent = new Intent(Settings.this,Maps.class);
+            startActivity(intent);
         });
             prefLandmarks.setOnCheckedChangeListener((group, checkedId) -> {
                    //find which radioButton is checked by id

@@ -9,6 +9,7 @@
     tools:context=".Maps">
 
  <LinearLayout
+     android:id="@+id/relLayout1"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:orientation="horizontal"
@@ -25,9 +26,17 @@
       android:layout_height="wrap_content"
       android:id="@+id/bt_find"
       android:text="Find"/>
-  
+
 
  </LinearLayout>
+
+ <ImageView
+     android:id="@+id/ic_profile"
+     android:layout_width="40dp"
+     android:layout_height="40dp"
+     android:layout_below="@+id/relLayout1"
+     android:scaleType="centerCrop"
+     android:src="@drawable/ic_profile" />
 
  <fragment
      android:layout_width="match_parent"
