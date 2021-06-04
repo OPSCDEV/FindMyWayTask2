@@ -14,10 +14,10 @@
         android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.061" />
 
     <Button
         android:id="@+id/btEdit"
@@ -49,8 +49,8 @@
 
     <ImageView
         android:id="@+id/ivApp"
-        android:layout_width="210dp"
-        android:layout_height="120dp"
+        android:layout_width="143dp"
+        android:layout_height="105dp"
         android:foreground="@drawable/findmywayicon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,19 +115,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.326" />
 
-    <EditText
-        android:id="@+id/txtLandPref"
-        android:layout_width="351dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
     <TextView
         android:id="@+id/tvPreflandmark"
         android:layout_width="wrap_content"
@@ -156,19 +143,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.563" />
 
-    <EditText
-        android:id="@+id/txtprefUnit"
-        android:layout_width="351dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.626" />
-
     <TextView
         android:id="@+id/tvFavlocations"
         android:layout_width="wrap_content"
@@ -193,5 +167,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFavlocations"
         app:layout_constraintVertical_bias="0.061" />
+
+    <Spinner
+        android:id="@+id/spnPrefUnit"
+        android:layout_width="349dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="256dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPrefUnit" />
+
+    <Spinner
+        android:id="@+id/spnlandPref"
+        android:layout_width="349dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="344dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPreflandmark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

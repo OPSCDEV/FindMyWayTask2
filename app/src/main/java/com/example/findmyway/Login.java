@@ -32,6 +32,7 @@ public class Login extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
+    Intent intentt;
 
     DatabaseReference reference;
 
@@ -43,6 +44,8 @@ public class Login extends AppCompatActivity {
         Email = findViewById(R.id.txtEmail);
         Password = findViewById(R.id.txtPassword);
         firebaseAuth = FirebaseAuth.getInstance();
+       // intentt = getIntent();
+        //String regID = intentt.getStringExtra("UIDREG");
 
         SignUp = findViewById(R.id.btRegister);
         SignIn = findViewById(R.id.btSignIn);
@@ -154,6 +157,8 @@ public class Login extends AppCompatActivity {
         });
     }
     private void CheckUserPref(String useremail){
+        intentt = getIntent();
+        String a = intentt.getStringExtra("UIDREG");
         reference.orderByChild("email").equalTo(useremail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -169,6 +174,7 @@ public class Login extends AppCompatActivity {
                         passSetting = new Intent(Login.this,  Maps.class);
                         passSetting.putExtra("Email_Key", useremail);
                         startActivity(passSetting);
+
                     } else{
                         Toast.makeText(Login.this, "emails dont match", Toast.LENGTH_SHORT).show();
                     }

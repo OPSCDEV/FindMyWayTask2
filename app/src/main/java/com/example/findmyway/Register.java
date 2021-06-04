@@ -21,6 +21,7 @@ public class Register extends AppCompatActivity {
     Button SignUp, SignIn;
     FirebaseAuth firebaseAuth;
     DatabaseReference reference;
+    String uid = FirebaseAuth.getInstance().getUid();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +37,8 @@ public class Register extends AppCompatActivity {
         Firebasedb = FirebaseDatabase.getInstance().getReference();
         Firebasedb = Firebasedb.child("User");
         firebaseAuth = FirebaseAuth.getInstance();
-        reference = FirebaseDatabase.getInstance().getReference("User");
 
+        reference = FirebaseDatabase.getInstance().getReference("User");
         SignUp.setOnClickListener(v -> CheckUserExists());
         SignIn.setOnClickListener(v -> {
             Intent intent = new Intent(this, Login.class);
@@ -45,6 +46,7 @@ public class Register extends AppCompatActivity {
         });
     }
     private  void CheckUserExists(){
+
         String userEmail = Email.getText().toString().trim();
         reference.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
             @Override
@@ -56,7 +58,7 @@ public class Register extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    UserReg();
+                    UserReg(uid);
                 }
             }
             @Override
@@ -65,7 +67,7 @@ public class Register extends AppCompatActivity {
             }
         });
     }
-    private void UserReg()
+    private void UserReg(String userId)
     {
         String name=Fname.getText().toString().trim();
         String lname=Lname.getText().toString().trim();
@@ -91,9 +93,15 @@ public class Register extends AppCompatActivity {
                     }
                 });
 
+
+
+
                 String id = Firebasedb.push().getKey();
                 User doctorReg = new User(name, lname, address, email);
-                Firebasedb.child(id).setValue(doctorReg);
+                Firebasedb.child(userId).setValue(doctorReg);
+                /*Firebasedb.child(id).setValue(doctorReg);*/
+                Intent passSetting =new Intent(Register.this, Login.class);
+                startActivity(passSetting);
             }
             else{
                 Toast.makeText(this, "Please fill in email and password", Toast.LENGTH_SHORT).show();

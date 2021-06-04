@@ -119,7 +119,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
         });
         //gets profile activity
-        //Profile(email);
+       // Profile(email);
         // add fav location
         // Need to add email to add favorite list when saving the fav location
         //AddFavLocation(email,places);

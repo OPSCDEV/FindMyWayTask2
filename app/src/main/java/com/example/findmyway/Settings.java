@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,12 +24,15 @@ public class Settings extends AppCompatActivity {
     Intent intent;
     Preferences preferences;
     RadioGroup prefLandmarks, prefUnits;
+    FirebaseAuth firebaseAuth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        firebaseAuth = FirebaseAuth.getInstance();
         prefLandmarks =  findViewById(R.id.rgPreflandmark);
         prefUnits =findViewById(R.id.rgPrefDistance);
         historical = findViewById(R.id.rbHistorical);
@@ -40,37 +44,18 @@ public class Settings extends AppCompatActivity {
         prefDistance = findViewById(R.id.txtDistancePref);
         _continue = findViewById(R.id.btprefernce);
 
+
         Firebasedb = FirebaseDatabase.getInstance().getReference();
         Firebasedb = Firebasedb.child("User_Pref");
 
         intent = getIntent();
-        String email = intent.getStringExtra("Email_Key");
+
 
         prefLandmark.setEnabled(false);
         prefDistance.setEnabled(false);
 
-        _continue.setOnClickListener(v -> {
 
-            String selectedPrefLandmark;
-            String selectedPrefDistance;
-            if(historical.isChecked()){
-                 selectedPrefLandmark = "Historical";
-            }else if(modern.isChecked()){
-                selectedPrefLandmark = "Modern";
-            }else{
-                selectedPrefLandmark = "Popular";
-            }
-            if(metric.isChecked()){
-                selectedPrefDistance = "Kilometers";
-            }else{
-                selectedPrefDistance = "Miles";
-            }
 
-            String id = Firebasedb.push().getKey();
-            preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
-            Firebasedb.child(id).setValue(preferences);
-            startActivity(new Intent(Settings.this, Maps.class));
-        });
             prefLandmarks.setOnCheckedChangeListener((group, checkedId) -> {
                    //find which radioButton is checked by id
                 if(checkedId == R.id.rbHistorical) {
@@ -90,5 +75,33 @@ public class Settings extends AppCompatActivity {
                     prefDistance.setText("Imperial units");
                 }
             });
+        String email = intent.getStringExtra("Email_Key");
+        Register a1 = new Register();
+        String a = a1.uid;
+        SaveSettings(email, a);
+    }
+    private void SaveSettings(String email, String a) {
+        _continue.setOnClickListener(v -> {
+
+            String selectedPrefLandmark;
+            String selectedPrefDistance;
+            if (historical.isChecked()) {
+                selectedPrefLandmark = "Historical";
+            } else if (modern.isChecked()) {
+                selectedPrefLandmark = "Modern";
+            } else {
+                selectedPrefLandmark = "Popular";
+            }
+            if (metric.isChecked()) {
+                selectedPrefDistance = "Kilometers";
+            } else {
+                selectedPrefDistance = "Miles";
+            }
+
+            String id = Firebasedb.push().getKey();
+            preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
+            Firebasedb.child(a).setValue(preferences);
+            startActivity(new Intent(Settings.this, Maps.class));
+        });
     }
 }

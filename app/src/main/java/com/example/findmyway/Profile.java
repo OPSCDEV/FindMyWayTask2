@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -26,10 +27,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Profile extends AppCompatActivity {
 
-    EditText Uaddress,Fname,  landPref, unitPref;
+    EditText Uaddress,Fname;
+    Spinner landPref, unitPref;
     Button edit, save;
     DatabaseReference referenceUser,referencePref;
-    Intent intent;
+    Intent intent, intentt;
     Spinner Flocation;
     Query refQuery;
 
@@ -43,8 +45,8 @@ public class Profile extends AppCompatActivity {
 
          Flocation = findViewById(R.id.spnFavlocations);
 
-         landPref = findViewById(R.id.txtLandPref);
-         unitPref = findViewById(R.id.txtprefUnit);
+         landPref = findViewById(R.id.spnlandPref);
+         unitPref = findViewById(R.id.spnPrefUnit);
 
          edit = findViewById(R.id.btEdit);
          save = findViewById(R.id.btSave);
@@ -68,7 +70,7 @@ public class Profile extends AppCompatActivity {
         });
 
         save.setOnClickListener(v -> {
-            SaveChanges(email);
+            SavePrefUser();
         });}
 
     private void getUserDetails(String email){
@@ -101,11 +103,11 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
-                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
-                    String prefdistancedb = datas.child("prefDistance").getValue().toString();
-
-                    landPref.setText(prefLandmarkdb);
-                    unitPref.setText(prefdistancedb);
+                    String[] lPref = new String[]{"Historical", "Popular" , "Modern"};
+                    landPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, lPref));
+                    String[] uPref = new String[]{"Kilometers", "Miles"};
+                    unitPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, uPref));
+                    //String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
 
                     landPref.setEnabled(false);
                     unitPref.setEnabled(false);
@@ -118,18 +120,16 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-    private void SaveChanges(String email){
-
-                refQuery.getRef().child("address").setValue(Uaddress.getText().toString());
-                referencePref.child("prefDistance").setValue(landPref.getText().toString());
-                referencePref.child("prefLandmark").setValue(unitPref.getText().toString());
-
-                Fname.setEnabled(false);
-                Uaddress.setEnabled(false);
-                Flocation.setEnabled(false);
-                landPref.setEnabled(false);
-                unitPref.setEnabled(false);
-
+    private void SavePrefUser(){
+        Register a1 = new Register();
+        String a = a1.uid;
+        referencePref.child(a).child("prefDistance").setValue(unitPref.getItemAtPosition(unitPref.getSelectedItemPosition()).toString());
+        referencePref.child(a).child("prefLandmark").setValue(landPref.getItemAtPosition(landPref.getSelectedItemPosition()).toString());
+        landPref.setEnabled(false);
+        unitPref.setEnabled(false);
+        Fname.setEnabled(false);
+        Uaddress.setEnabled(false);
+        Flocation.setEnabled(false);
     }
     private void EnableText(){
         Uaddress.setEnabled(true);
