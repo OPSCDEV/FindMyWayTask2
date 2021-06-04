@@ -8,74 +8,56 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
-import android.widget.AutoCompleteTextView;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import android.widget.Toast;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private static final String TAG = "MainActivity";
+    Spinner spType;
+    Button btFind;
+    SupportMapFragment supportMapFragment;
+    GoogleMap map;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    double currentLat = 0, currentLng = 0;
+
     private boolean mLocationPermissionGranted = false;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private static final float DEFAULT_ZOOM = 15f;
-    //public String searchString;
+    private static final String TAG = "MainActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    //public String plce;
-    public Place places;
 
     private ImageView profile, favLocation;
     Intent intent;
@@ -87,120 +69,105 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_maps);
         getLocationPermission();
 
-        profile = findViewById(R.id.ic_profile);
-        favLocation = findViewById(R.id.ic_favlocation);
+        //profile = findViewById(R.id.ic_profile);
+        //favLocation = findViewById(R.id.ic_favlocation);
 
         intent = getIntent();
         String email = intent.getStringExtra("Email_Key");
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.setLocationBias(RectangularBounds.newInstance(
-                new LatLng(-47.1788335, 16.3335213),
-                new LatLng(-22.1250301, 38.2898954)));
+        getLocationPermission();
+        spType = findViewById(R.id.sp_type);
+        btFind = findViewById(R.id.bt_find);
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
+        String[] placeTypeList = {"atm", "bank", "hospital", "movie_theater", "restaurant"};
+        String[] placeNameList = {"ATM", "Bank", "Hospital", "Movie Theater", "Restaurant"};
 
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyD8HIfCfFq12-QWwvcX05YHsdyZ_8jushg");
+
+        spType.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, placeNameList));
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(Maps.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getCurrentFocus();
+        }else{
+            ActivityCompat.requestPermissions(Maps.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
         }
+        btFind.setOnClickListener(v -> {
+            int i = spType.getSelectedItemPosition();
 
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                places = place;
-                geoLocate();
-            }
+            final Task location = fusedLocationProviderClient.getLastLocation();
+            location.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Location currentLocation = (Location) task.getResult();
+
+                    String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"+
+                            "?location="+currentLocation.getLatitude()+","+currentLocation.getLongitude()+
+                            "&radius=5000"+
+                            "&types="+placeTypeList[i] +
+                            "&sensor=true"+
+                            "&key="+getResources().getString(R.string.google_map_key);
+                    Log.d(TAG, "onCreate: Url: "+url);
+                    new PlaceTask().execute(url);
 
 
-            @Override
-            public void onError(Status status) {
-                Log.d("Maps", "An error occurred: " + status);
-            }
+                } else {
+                    Toast.makeText(Maps.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         });
-
         //gets profile activity
-        Profile(email);
-
+        //Profile(email);
         // add fav location
         // Need to add email to add favorite list when saving the fav location
-        AddFavLocation(email,places);
+        //AddFavLocation(email,places);
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onMapReady: map is ready");
-        mMap = googleMap;
+        map = googleMap;
 
         if (mLocationPermissionGranted) {
             getDeviceLocation();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
             }
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
     }
     private void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
             if (mLocationPermissionGranted) {
 
-                final Task location = mFusedLocationProviderClient.getLastLocation();
+                final Task location = fusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: found location!");
                         Location currentLocation = (Location) task.getResult();
 
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                DEFAULT_ZOOM);
+                                15f);
 
                     } else {
-                        Log.d(TAG, "onComplete: current location is null");
                         Toast.makeText(Maps.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         } catch (SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
     private void moveCamera(LatLng latLng, float zoom) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
     }
     public void init() {
         Log.d(TAG, "init: initializing");
-    }
-    private void geoLocate() {
-       Log.d(TAG, "geoLocate: locating");
-        String searchstring = this.places.getName();
-
-        Geocoder geocoder = new Geocoder(Maps.this);
-        List<Address> list = new ArrayList<>();
-        try {
-            list = geocoder.getFromLocationName(searchstring, 1);
-        } catch (IOException e) {
-            Log.e(TAG, "geoLocate: Exception" + e.getMessage());
-        }
-        if (list.size() > 0) {
-            Address address = list.get(0);
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-
-            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()),DEFAULT_ZOOM);
-            MarkerOptions mp = new MarkerOptions();
-            mp.position(new LatLng(address.getLatitude(),address.getLongitude()));
-            mMap.addMarker(mp);
-        }
     }
     private void getLocationPermission () {
         Log.d(TAG, "getLocationPermission: getting location permissions");
@@ -227,12 +194,13 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private void initMap () {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(Maps.this);
     }
     @Override
     public void onRequestPermissionsResult (int requestCode, @NonNull String[] permissions,
-    @NonNull int[] grantResults){
+                                            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionGranted = false;
 
@@ -254,6 +222,80 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             }
         }
     }
+
+    private class PlaceTask extends AsyncTask<String,Integer,String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.d(TAG, "doInBackground: DoingBackground");
+            String data = null;
+            try {
+                data = downloadUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            new ParseTask().execute(s);
+        }
+    }
+
+    private String downloadUrl(String string) throws IOException {
+        Log.d(TAG, "downloadUrl: Doing DownloadUrl");
+        URL url = new URL(string);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        InputStream stream = connection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        while((line = reader.readLine())!=null){
+            builder.append(line);
+        }
+        String data = builder.toString();
+
+        reader.close();
+        return data;
+    }
+
+    private class ParseTask extends AsyncTask<String,Integer, List<HashMap<String,String>>>{
+        @Override
+        protected List<HashMap<String, String>> doInBackground(String... strings) {
+            JsonParser jsonParser = new JsonParser();
+            List<HashMap<String,String>> mapList = null;
+            try {
+                JSONObject object = new JSONObject(strings[0]);
+                mapList = jsonParser.parseResult(object);
+                Log.d(TAG, "doInBackground: doing background check"+mapList.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return mapList;
+        }
+
+        @Override
+        protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
+            map.clear();
+            for(int i=0 ; i <hashMaps.size();i++){
+                Log.d(TAG, "onPostExecute: Running Through Loop");
+                HashMap<String,String> hashMap = hashMaps.get(i);
+                double lat = Double.parseDouble(hashMap.get("lat"));
+                double lng = Double.parseDouble(hashMap.get("lng"));
+                String name = hashMap.get("name");
+                LatLng latLng = new LatLng(lat,lng);
+                Log.d(TAG, "doInBackground: doing background check"+latLng+" "+name);
+                MarkerOptions options = new MarkerOptions();
+                options.position(latLng);
+                options.title(name);
+                map.addMarker(options);
+            }
+        }
+    }
+
     private void Profile(String email){
         profile.setOnClickListener(v -> {
             Intent passSetting =new Intent(Maps.this, Profile.class);
@@ -261,8 +303,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             startActivity(passSetting);
         });
     }
-    private void AddFavLocation(String email,Place places){
-        favLocation.setOnClickListener(v -> Toast.makeText(Maps.this, "UserEmail" +email + " User favorite location saved; Location:"+places, Toast.LENGTH_SHORT).show());
+    private void AddFavLocation(String email){
+        favLocation.setOnClickListener(v -> Toast.makeText(Maps.this, "UserEmail" +email + " User favorite location saved;", Toast.LENGTH_SHORT).show());
 
     }
     }

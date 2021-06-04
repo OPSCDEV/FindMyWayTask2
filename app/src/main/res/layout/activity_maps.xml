@@ -1,66 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
- <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     android:id="@+id/map"
-    tools:context=".MapsActivity"
-     android:name="com.google.android.gms.maps.SupportMapFragment" />
+    android:orientation="vertical"
+    tools:context=".Maps">
 
- <fragment android:id="@+id/autocomplete_fragment"
+ <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:hint="Enter address , City, Zip Code"
-     android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+     android:orientation="horizontal"
+     android:padding="8dp">
 
- <RelativeLayout
+  <Spinner
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:id="@+id/sp_type"
+      android:background="@android:drawable/editbox_background"/>
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/bt_find"
+      android:text="Find"/>
+  
+
+ </LinearLayout>
+
+ <fragment
      android:layout_width="match_parent"
-     android:layout_height="50dp"
-     android:layout_marginTop="10dp"
-     android:layout_marginRight="10dp"
-     android:layout_marginLeft="10dp"
-     android:elevation="10dp"
-     android:background="@drawable/white_border"
-     android:id="@+id/relLayout1">
+     android:layout_height="match_parent"
+     android:id="@+id/google_map"
+     android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-  <ImageView
-      android:id="@+id/ic_magnify"
-      android:layout_width="15dp"
-      android:layout_height="15dp"
-      android:layout_centerVertical="true"
-      android:layout_marginLeft="10dp"
-      android:src="@drawable/ic_magnify" />
-
- </RelativeLayout>
-
- <ImageView
-     android:id="@+id/ic_profile"
-     android:layout_width="60dp"
-     android:layout_height="60dp"
-     android:layout_below="@id/relLayout1"
-     android:layout_alignParentRight="true"
-     android:layout_marginRight="10dp"
-     android:layout_marginTop="10dp"
-     android:scaleType="centerCrop"
-     android:src="@drawable/ic_profile" />
-
- <ImageView
-     android:id="@+id/ic_favlocation"
-     android:layout_width="60dp"
-     android:layout_height="60dp"
-     android:layout_below="@id/relLayout1"
-     android:layout_alignParentRight="false"
-     android:layout_marginRight="10dp"
-     android:layout_marginTop="10dp"
-     android:scaleType="centerCrop"
-     android:src="@drawable/ic_fav_location" />
-
-
-</RelativeLayout>
+</LinearLayout>
 
 
