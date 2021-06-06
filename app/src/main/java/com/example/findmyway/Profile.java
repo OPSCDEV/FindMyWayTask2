@@ -28,12 +28,14 @@ import org.jetbrains.annotations.NotNull;
 public class Profile extends AppCompatActivity {
 
     EditText Uaddress,Fname;
+    TextView  lanPref, disPref;
     Spinner landPref, unitPref;
     Button edit, save;
     DatabaseReference referenceUser,referencePref;
     Intent intent;
     Spinner Flocation;
     Query refQuery;
+    String prefdistancedb, prefLandmarkdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class Profile extends AppCompatActivity {
 
          Fname = findViewById(R.id.txtFirstname);
          Uaddress = findViewById(R.id.txtAddressp);
+         lanPref = findViewById(R.id.txtlPref);
+         disPref = findViewById(R.id.txtDis);
 
          Flocation = findViewById(R.id.spnFavlocations);
 
@@ -50,6 +54,7 @@ public class Profile extends AppCompatActivity {
 
          edit = findViewById(R.id.btEdit);
          save = findViewById(R.id.btSave);
+
          intent = getIntent();
          String email = intent.getStringExtra("Email_Key");
          String stringifyEmail = email;
@@ -62,13 +67,18 @@ public class Profile extends AppCompatActivity {
         getUserDetails(stringifyEmail);
         getUserPref(stringifyEmail);
 
+
         edit.setOnClickListener(v -> {
             EnableText();
         });
 
         save.setOnClickListener(v -> {
             SavePrefUser();
-        });}
+        });
+        /*disUserpref();*/
+    }
+
+
 
     private void getUserDetails(String email){
         //Works
@@ -100,11 +110,14 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot datas : snapshot.getChildren()) {
+                     prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                     prefdistancedb = datas.child("prefDistance").getValue().toString();
                     String[] lPref = new String[]{"Historical", "Popular" , "Modern"};
                     landPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, lPref));
                     String[] uPref = new String[]{"Kilometers", "Miles"};
                     unitPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, uPref));
-                    String prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                    lanPref.setText(prefLandmarkdb);
+                    disPref.setText(prefdistancedb);
 
                     landPref.setEnabled(false);
                     unitPref.setEnabled(false);
@@ -139,5 +152,8 @@ public class Profile extends AppCompatActivity {
         Flocation.setEnabled(true);
         landPref.setEnabled(true);
         unitPref.setEnabled(true);
+    }
+    private void disUserpref(){
+
     }
 }
