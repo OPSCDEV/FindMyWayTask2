@@ -153,7 +153,5 @@ public class Profile extends AppCompatActivity {
         landPref.setEnabled(true);
         unitPref.setEnabled(true);
     }
-    private void disUserpref(){
-
-    }
+    
 }
