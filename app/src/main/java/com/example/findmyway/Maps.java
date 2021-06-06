@@ -97,7 +97,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         }else{
             if(preflandmark.equals("Modern")/*|| (prefmark.equals("Modern"))*/){
                 String[] placeTypeList = new String[]{"natural_feature","landmark", "tourist_attraction"};
-                String[] placeNameList = new String[]{"Natural Features", "Local Landmarks", "Tourist Attractions"};
+                String[] placeNameList = new String[]{"Natural Features", " ", "Tourist Attractions"};
                 spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                 GetPlaces(placeTypeList);
             }else{
