@@ -93,13 +93,9 @@ public class Register extends AppCompatActivity {
                     }
                 });
 
-
-
-
                 String id = Firebasedb.push().getKey();
                 User doctorReg = new User(name, lname, address, email);
                 Firebasedb.child(userId).setValue(doctorReg);
-                /*Firebasedb.child(id).setValue(doctorReg);*/
                 Intent passSetting =new Intent(Register.this, Login.class);
                 startActivity(passSetting);
             }

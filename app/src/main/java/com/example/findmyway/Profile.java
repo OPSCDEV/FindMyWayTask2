@@ -31,7 +31,7 @@ public class Profile extends AppCompatActivity {
     Spinner landPref, unitPref;
     Button edit, save;
     DatabaseReference referenceUser,referencePref;
-    Intent intent, intentt;
+    Intent intent;
     Spinner Flocation;
     Query refQuery;
 
@@ -58,9 +58,6 @@ public class Profile extends AppCompatActivity {
         refQuery = referenceUser.orderByChild("email").equalTo(email);
 
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
-
-        //FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
-        //String uid = currentFirebaseUser.getUid();
 
         getUserDetails(stringifyEmail);
         getUserPref(stringifyEmail);
@@ -126,16 +123,17 @@ public class Profile extends AppCompatActivity {
 
         referencePref.child(a).child("prefDistance").setValue(unitPref.getItemAtPosition(unitPref.getSelectedItemPosition()).toString());
         referencePref.child(a).child("prefLandmark").setValue(landPref.getItemAtPosition(landPref.getSelectedItemPosition()).toString());
+
         landPref.setEnabled(false);
         unitPref.setEnabled(false);
         Fname.setEnabled(false);
         Uaddress.setEnabled(false);
         Flocation.setEnabled(false);
+
         TextView textView = (TextView)landPref.getSelectedView();
         String result = textView.getText().toString();
         Intent passSetting = new Intent(this, Maps.class);
-        /*passSetting.putExtra("selectedLand", result );
-        startActivity(passSetting);*/
+
     }
     private void EnableText(){
         Flocation.setEnabled(true);
