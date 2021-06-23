@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 public class Profile extends AppCompatActivity {
 
     EditText Uaddress,Fname;
-    TextView  lanPref, disPref;
+    TextView  lanPref, disPref,landpreftxt, unitpreftxt,tvlandpref1, tvprefunit2;
     Spinner landPref, unitPref;
     Button edit, save;
     DatabaseReference referenceUser,referencePref;
@@ -46,7 +46,8 @@ public class Profile extends AppCompatActivity {
          Uaddress = findViewById(R.id.txtAddressp);
          lanPref = findViewById(R.id.txtlPref);
          disPref = findViewById(R.id.txtDis);
-
+        tvlandpref1 = findViewById(R.id.tvlandpref1);
+        tvprefunit2 = findViewById(R.id.tvPrefUnit2);
          Flocation = findViewById(R.id.spnFavlocations);
 
          landPref = findViewById(R.id.spnlandPref);
@@ -54,6 +55,8 @@ public class Profile extends AppCompatActivity {
 
          edit = findViewById(R.id.btEdit);
          save = findViewById(R.id.btSave);
+         landpreftxt = findViewById(R.id.txtlPref);
+         unitpreftxt = findViewById(R.id.txtDis);
 
          intent = getIntent();
          String email = intent.getStringExtra("Email_Key");
@@ -66,9 +69,19 @@ public class Profile extends AppCompatActivity {
 
         getUserDetails(stringifyEmail);
         getUserPref(stringifyEmail);
+        landPref.setVisibility(View.INVISIBLE);
+        unitPref.setVisibility(View.INVISIBLE);
+
+
 
 
         edit.setOnClickListener(v -> {
+            landpreftxt.setVisibility(View.INVISIBLE);
+            unitpreftxt.setVisibility(View.INVISIBLE);
+            tvprefunit2.setVisibility(View.INVISIBLE);
+            tvlandpref1.setVisibility(View.INVISIBLE);
+            landPref.setVisibility(View.VISIBLE);
+            unitPref.setVisibility(View.VISIBLE);
             EnableText();
         });
 
@@ -112,15 +125,18 @@ public class Profile extends AppCompatActivity {
                 for (DataSnapshot datas : snapshot.getChildren()) {
                      prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
                      prefdistancedb = datas.child("prefDistance").getValue().toString();
-                    String[] lPref = new String[]{"Historical", "Popular" , "Modern"};
-                    landPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, lPref));
-                    String[] uPref = new String[]{"Kilometers", "Miles"};
-                    unitPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, uPref));
-                    lanPref.setText(prefLandmarkdb);
-                    disPref.setText(prefdistancedb);
+                     String[] lPref = new String[]{"Historical", "Popular" , "Modern"};
 
-                    landPref.setEnabled(false);
-                    unitPref.setEnabled(false);
+                     landPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, lPref));
+
+
+                     String[] uPref = new String[]{"Kilometers", "Miles"};
+                     unitPref.setAdapter(new ArrayAdapter<>(Profile.this, android.R.layout.simple_spinner_dropdown_item, uPref));
+                     lanPref.setText(prefLandmarkdb);
+                     disPref.setText(prefdistancedb);
+
+                     landPref.setEnabled(false);
+                     unitPref.setEnabled(false);
                 }
             }
 
