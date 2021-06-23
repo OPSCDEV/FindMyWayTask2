@@ -34,6 +34,7 @@ public class Register extends AppCompatActivity {
         Password = findViewById(R.id.txtSUPassword);
         SignUp = findViewById(R.id.btContinue);
         SignIn = findViewById(R.id.btSUSignIn);
+
         Firebasedb = FirebaseDatabase.getInstance().getReference();
         Firebasedb = Firebasedb.child("User");
         firebaseAuth = FirebaseAuth.getInstance();

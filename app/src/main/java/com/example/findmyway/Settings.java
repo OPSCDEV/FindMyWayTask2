@@ -98,7 +98,6 @@ public class Settings extends AppCompatActivity {
                 selectedPrefDistance = "Miles";
             }
 
-            String id = Firebasedb.push().getKey();
             preferences = new Preferences(selectedPrefLandmark, selectedPrefDistance, email);
             Firebasedb.child(a).setValue(preferences);
             Intent passSetting = new Intent(this, Maps.class);
