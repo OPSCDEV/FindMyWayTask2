@@ -46,8 +46,7 @@ public class Profile extends AppCompatActivity {
          Uaddress = findViewById(R.id.txtAddressp);
          lanPref = findViewById(R.id.txtlPref);
          disPref = findViewById(R.id.txtDis);
-        tvlandpref1 = findViewById(R.id.tvlandpref1);
-        tvprefunit2 = findViewById(R.id.tvPrefUnit2);
+
          Flocation = findViewById(R.id.spnFavlocations);
 
          landPref = findViewById(R.id.spnlandPref);
@@ -78,8 +77,6 @@ public class Profile extends AppCompatActivity {
         edit.setOnClickListener(v -> {
             landpreftxt.setVisibility(View.INVISIBLE);
             unitpreftxt.setVisibility(View.INVISIBLE);
-            tvprefunit2.setVisibility(View.INVISIBLE);
-            tvlandpref1.setVisibility(View.INVISIBLE);
             landPref.setVisibility(View.VISIBLE);
             unitPref.setVisibility(View.VISIBLE);
             EnableText();
@@ -88,7 +85,6 @@ public class Profile extends AppCompatActivity {
         save.setOnClickListener(v -> {
             SavePrefUser();
         });
-        /*disUserpref();*/
     }
 
 
@@ -162,6 +158,7 @@ public class Profile extends AppCompatActivity {
         TextView textView = (TextView)landPref.getSelectedView();
         String result = textView.getText().toString();
         Intent passSetting = new Intent(this, Maps.class);
+        startActivity(passSetting);
 
     }
     private void EnableText(){
