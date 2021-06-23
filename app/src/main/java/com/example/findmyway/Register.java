@@ -46,7 +46,6 @@ public class Register extends AppCompatActivity {
         });
     }
     private  void CheckUserExists(){
-
         String userEmail = Email.getText().toString().trim();
         reference.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,6 +66,7 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
     private void UserReg(String userId)
     {
         String name=Fname.getText().toString().trim();
@@ -92,8 +92,6 @@ public class Register extends AppCompatActivity {
                         startActivity(new Intent(Register.this, Login.class));
                     }
                 });
-
-                /*String id = Firebasedb.push().getKey();*/
                 User doctorReg = new User(name, lname, address, email);
                 Firebasedb.child(userId).setValue(doctorReg);
                 Intent passSetting =new Intent(Register.this, Login.class);
@@ -103,7 +101,5 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(this, "Please fill in email and password", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
-
 }
