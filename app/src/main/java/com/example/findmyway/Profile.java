@@ -22,13 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
 public class Profile extends AppCompatActivity {
 
     EditText Uaddress,Fname;
-    TextView  lanPref, disPref,landpreftxt, unitpreftxt,tvlandpref1, tvprefunit2;
+    TextView  lanPref, disPref,landpreftxt, unitpreftxt;
     Spinner landPref, unitPref;
     Button edit, save;
     DatabaseReference referenceUser,referencePref,FavPref;
@@ -56,6 +57,7 @@ public class Profile extends AppCompatActivity {
          save = findViewById(R.id.btSave);
          landpreftxt = findViewById(R.id.txtlPref);
          unitpreftxt = findViewById(R.id.txtDis);
+         String uid = FirebaseAuth.getInstance().getUid();
 
          intent = getIntent();
          String email = intent.getStringExtra("Email_Key");
@@ -71,7 +73,27 @@ public class Profile extends AppCompatActivity {
         getUserPref(stringifyEmail);
         landPref.setVisibility(View.INVISIBLE);
         unitPref.setVisibility(View.INVISIBLE);
+        FavPref.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final List<String> areas = new ArrayList<String>();
 
+                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                    String Fav = areaSnapshot.getValue(String.class);
+                    areas.add(Fav);
+                }
+
+                Spinner areaSpinner =  findViewById(R.id.spnFavlocations);
+                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(Profile.this, android.R.layout.simple_spinner_item, areas);
+                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                areaSpinner.setAdapter(areasAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -115,27 +137,7 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-    private  void getUserfavlocation(){
-        FavPref.child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
-                    String areaName = areaSnapshot.getValue(String.class);
 
-                    Spinner areaSpinner = findViewById(R.id.spnFavlocations);
-                    final String[] areas = {areaName};
-                    ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(Profile.this, android.R.layout.simple_spinner_item, areas);
-                    areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    areaSpinner.setAdapter(areasAdapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
     private void getUserPref(String email){
         referencePref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -175,7 +177,7 @@ public class Profile extends AppCompatActivity {
         unitPref.setEnabled(false);
         Fname.setEnabled(false);
         Uaddress.setEnabled(false);
-        Flocation.setEnabled(false);
+
 
         TextView textView = (TextView)landPref.getSelectedView();
         String result = textView.getText().toString();
