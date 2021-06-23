@@ -8,10 +8,14 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,9 +28,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +48,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,12 +71,17 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "MainActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private ImageView profile,favorite;
 
-    private ImageView profile;
     Intent intent;
+    GetLatLng getLatLng;
 
+    DatabaseReference Firebasedb;
+    FirebaseAuth firebaseAuth;
+    String uid = FirebaseAuth.getInstance().getUid();
+
+    List<String> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +90,20 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_maps);
         getLocationPermission();
 
-        profile = findViewById(R.id.ic_profile);
-        referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
-
         intent = getIntent();
         String email = intent.getStringExtra("Email_Key");
         String preflandmark = intent.getStringExtra("PrefLandmark_Key");
+
+        data = new ArrayList<>();
+
+        profile = findViewById(R.id.ic_profile);
+        favorite = findViewById(R.id.ic_fav_location);
+        getLatLng = new GetLatLng();
+        referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
+
+        Firebasedb = FirebaseDatabase.getInstance().getReference();
+        Firebasedb = Firebasedb.child("Fav_Locations");
+        firebaseAuth = FirebaseAuth.getInstance();
 
         getLocationPermission();
         spType = findViewById(R.id.sp_type);
@@ -101,18 +123,16 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 GetPlaces(placeTypeList);
             }else{
                 if(preflandmark.equals("Popular")){
-                    String[] placeTypeList = new String[]{"restaurant", "cafe", "park","night_club"};
-                    //Display
-                    String[] placeNameList = new String[]{"Restaurant", "Cafe", "Park","Night Club"};
+                    String[] placeTypeList = new String[]{"restaurant", "cafe", "park","bar"};
+                    String[] placeNameList = new String[]{"Restaurant", "Cafe", "Park","Bars"};
                     spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                     GetPlaces(placeTypeList);
                 }
             }
         }
-
-        Profile(email);
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        SaveFavoriteLocation(uid);
+        Profile(email);
     }
 
     @Override
@@ -156,8 +176,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     private void moveCamera(LatLng latLng, float zoom) {
+        Log.d(TAG, "moveCamera: lat lng: "+latLng);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
     }
 
     public void init() {
@@ -282,12 +302,43 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 double lat = Double.parseDouble(hashMap.get("lat"));
                 double lng = Double.parseDouble(hashMap.get("lng"));
                 String name = hashMap.get("name");
-                String ratings = hashMap.get("rating");
-                LatLng latLng = new LatLng(lat, lng);
-                MarkerOptions options = new MarkerOptions();
-                options.position(latLng);
-                options.title("Name: "+name+"; Rating: "+ratings);
-                map.addMarker(options);
+                String businessStatus = hashMap.get("business_status");
+
+                if(hashMap.isEmpty()||hashMap==null||hashMap.get(i)==null){
+                    LatLng latLng = new LatLng(lat, lng);
+                    MarkerOptions options = new MarkerOptions();
+                    options.position(latLng);
+                    options.title(name);
+                    map.addMarker(options);
+                }
+                else{
+                    LatLng latLng = new LatLng(lat, lng);
+                    MarkerOptions options = new MarkerOptions();
+                    options.position(latLng);
+                    options.title(name);
+                    options.snippet(businessStatus);
+                    map.addMarker(options);
+                }
+//                LatLng latLng = new LatLng(lat, lng);
+//
+//                MarkerOptions options = new MarkerOptions();
+//                options.position(latLng);
+//                options.title(name);
+//                options.snippet(businessStatus);
+//                map.addMarker(options);
+
+                map.setOnMarkerClickListener(marker -> {
+                    if(marker.isInfoWindowShown()) {
+                        marker.hideInfoWindow();
+                    } else {
+                        marker.showInfoWindow();
+                    }
+                    Log.d(TAG, "onPostExecute: "+marker.getSnippet()+"Name: "+marker.getTitle()+"Latlng: "+marker.getPosition());
+                    getLatLng.setLatlng(marker.getPosition());
+                    getLatLng.setName(marker.getTitle());
+                    return true;
+                });
+
             }
         }
     }
@@ -322,7 +373,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     Toast.makeText(Maps.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                 }
             });
-
         });
     }
 
@@ -334,5 +384,22 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
+    private void SaveFavoriteLocation(String userId){
+        favorite.setOnClickListener(v -> {
+            if(getLatLng.equals(null)){
+                Toast.makeText(this, "Please select a marker to save the location", Toast.LENGTH_SHORT).show();
+            }else{
+                String Name = getLatLng.getName();
+                data.add(Name);
+                Firebasedb.child(userId).setValue(data).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Toast.makeText(Maps.this, "Great success", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this, "Error saving save landmark", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 }
 
