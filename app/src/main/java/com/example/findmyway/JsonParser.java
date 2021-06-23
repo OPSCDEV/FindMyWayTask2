@@ -13,11 +13,15 @@ public class JsonParser {
         HashMap<String,String> datalist = new HashMap<>();
         try {
             String name = object.getString("name");
+            double rating = object.getDouble("rating");
             String businessStatus = object.getString("business_status");
             String lat = object.getJSONObject("geometry").getJSONObject("location").getString("lat");
             String lng = object.getJSONObject("geometry").getJSONObject("location").getString("lng");
 
+            String ratingString = Double.toString(rating);
+
             datalist.put("name",name);
+            datalist.put("rating",ratingString);
             datalist.put("business_status",businessStatus);
             datalist.put("lat",lat);
             datalist.put("lng",lng);

@@ -111,20 +111,20 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
         if(preflandmark.equals("Historical")){
-            String[] placeTypeList = new String[]{"museum", "library", "monument"};
-            String[] placeNameList = new String[]{"Museum", "Library", "Monument"};
+            String[] placeTypeList = new String[]{"museum", "library"};
+            String[] placeNameList = new String[]{"Museum", "Library"};
             spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
             GetPlaces(placeTypeList);
         }else{
             if(preflandmark.equals("Modern")){
-                String[] placeTypeList = new String[]{"natural_feature","landmark", "tourist_attraction"};
-                String[] placeNameList = new String[]{"Natural Features", "Landmarks", "Tourist Attractions"};
+                String[] placeTypeList = new String[]{"landmark", "tourist_attraction"};
+                String[] placeNameList = new String[]{"Landmarks", "Tourist Attractions"};
                 spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                 GetPlaces(placeTypeList);
             }else{
                 if(preflandmark.equals("Popular")){
-                    String[] placeTypeList = new String[]{"restaurant", "cafe", "park","bar"};
-                    String[] placeNameList = new String[]{"Restaurant", "Cafe", "Park","Bars"};
+                    String[] placeTypeList = new String[]{"restaurant", "cafe","bar"};
+                    String[] placeNameList = new String[]{"Restaurant", "Cafe","Bars"};
                     spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                     GetPlaces(placeTypeList);
                 }
@@ -303,29 +303,14 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 double lng = Double.parseDouble(hashMap.get("lng"));
                 String name = hashMap.get("name");
                 String businessStatus = hashMap.get("business_status");
+                String rating = hashMap.get("rating");
 
-                if(hashMap.isEmpty()||hashMap==null||hashMap.get(i)==null){
-                    LatLng latLng = new LatLng(lat, lng);
-                    MarkerOptions options = new MarkerOptions();
-                    options.position(latLng);
-                    options.title(name);
-                    map.addMarker(options);
-                }
-                else{
-                    LatLng latLng = new LatLng(lat, lng);
-                    MarkerOptions options = new MarkerOptions();
-                    options.position(latLng);
-                    options.title(name);
-                    options.snippet(businessStatus);
-                    map.addMarker(options);
-                }
-//                LatLng latLng = new LatLng(lat, lng);
-//
-//                MarkerOptions options = new MarkerOptions();
-//                options.position(latLng);
-//                options.title(name);
-//                options.snippet(businessStatus);
-//                map.addMarker(options);
+                LatLng latLng = new LatLng(lat, lng);
+                MarkerOptions options = new MarkerOptions();
+                options.position(latLng);
+                options.title(name);
+                options.snippet(businessStatus +"; Rating: "+ rating);
+                map.addMarker(options);
 
                 map.setOnMarkerClickListener(marker -> {
                     if(marker.isInfoWindowShown()) {
