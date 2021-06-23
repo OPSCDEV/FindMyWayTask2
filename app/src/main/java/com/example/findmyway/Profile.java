@@ -31,7 +31,7 @@ public class Profile extends AppCompatActivity {
     TextView  lanPref, disPref,landpreftxt, unitpreftxt,tvlandpref1, tvprefunit2;
     Spinner landPref, unitPref;
     Button edit, save;
-    DatabaseReference referenceUser,referencePref;
+    DatabaseReference referenceUser,referencePref,FavPref;
     Intent intent;
     Spinner Flocation;
     Query refQuery;
@@ -65,6 +65,7 @@ public class Profile extends AppCompatActivity {
         refQuery = referenceUser.orderByChild("email").equalTo(email);
 
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
+        FavPref = FirebaseDatabase.getInstance().getReference("Fav_Locations");
 
         getUserDetails(stringifyEmail);
         getUserPref(stringifyEmail);
@@ -110,6 +111,27 @@ public class Profile extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+    private  void getUserfavlocation(){
+        FavPref.child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                    String areaName = areaSnapshot.getValue(String.class);
+
+                    Spinner areaSpinner = findViewById(R.id.spnFavlocations);
+                    final String[] areas = {areaName};
+                    ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(Profile.this, android.R.layout.simple_spinner_item, areas);
+                    areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    areaSpinner.setAdapter(areasAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -166,5 +188,6 @@ public class Profile extends AppCompatActivity {
         landPref.setEnabled(true);
         unitPref.setEnabled(true);
     }
+
 
 }
