@@ -375,7 +375,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
                     String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
                             "?location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() +
-                            "&radius=5000" +
+                            "&radius=10000" +
                             "&types=" + placeTypeList[i] +
                             "&sensor=true" +
                             "&key=" + getResources().getString(R.string.google_map_key);
