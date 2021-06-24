@@ -72,7 +72,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private ImageView profile,favorite;
+    private ImageView profile,favorite,Camera;
 
     Intent intent;
     GetLatLng getLatLng;
@@ -98,6 +98,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
 
         profile = findViewById(R.id.ic_profile);
         favorite = findViewById(R.id.ic_fav_location);
+        Camera = findViewById(R.id.ic_camera);
         getLatLng = new GetLatLng();
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
 

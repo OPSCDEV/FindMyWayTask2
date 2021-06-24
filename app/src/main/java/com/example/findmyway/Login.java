@@ -105,7 +105,7 @@ public class Login extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.exists()){
-                                                Toast.makeText(Login.this, "loading profile...", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(Login.this, "loading Maps...", Toast.LENGTH_SHORT).show();
                                                 CheckUserPref(userEmail);
                                             }
                                             else{

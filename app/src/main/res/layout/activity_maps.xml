@@ -30,11 +30,11 @@
 
  <RelativeLayout
      android:layout_width="match_parent"
-     android:layout_height="50dp"
-     android:layout_marginTop="10dp"
+     android:layout_height="45dp"
+     android:layout_marginTop="1dp"
      android:layout_marginRight="10dp"
      android:layout_marginLeft="10dp"
-     android:elevation="10dp"
+     android:elevation="1dp"
      android:id="@+id/relLayout2">
 
   <ImageView
@@ -53,6 +53,16 @@
       android:layout_marginRight="1dp"
       android:scaleType="centerCrop"
       android:src="@drawable/ic_fav_location" />
+
+  <ImageView
+      android:id="@+id/ic_camera"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_alignParentRight="true"
+      android:layout_marginTop="1dp"
+      android:layout_marginRight="181dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/ic_camera" />
 
  </RelativeLayout>
 
