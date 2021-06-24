@@ -4,16 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,6 +40,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,17 +49,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -74,14 +93,21 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private ImageView profile,favorite,Camera;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     Intent intent;
     GetLatLng getLatLng;
+    ImageView CamerPhoto;
 
     DatabaseReference Firebasedb;
     FirebaseAuth firebaseAuth;
     String uid = FirebaseAuth.getInstance().getUid();
 
     List<String> data;
+
+    public FirebaseStorage storage;
+    public StorageReference storageReference;
+    public String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +117,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         getLocationPermission();
 
         intent = getIntent();
-        String email = intent.getStringExtra("Email_Key");
+        email = intent.getStringExtra("Email_Key");
         String preflandmark = intent.getStringExtra("PrefLandmark_Key");
 
         data = new ArrayList<>();
@@ -99,12 +125,16 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         profile = findViewById(R.id.ic_profile);
         favorite = findViewById(R.id.ic_fav_location);
         Camera = findViewById(R.id.ic_camera);
+        CamerPhoto = findViewById(R.id.PhotoTake);
         getLatLng = new GetLatLng();
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
 
         Firebasedb = FirebaseDatabase.getInstance().getReference();
         Firebasedb = Firebasedb.child("Fav_Locations");
         firebaseAuth = FirebaseAuth.getInstance();
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         getLocationPermission();
         spType = findViewById(R.id.sp_type);
@@ -134,6 +164,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         SaveFavoriteLocation(uid);
         Profile(email);
+        TakePhoto();
     }
 
     @Override
@@ -384,6 +415,62 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 });
             }
         });
+    }
+
+    private void TakePhoto(){
+        Camera.setOnClickListener(v -> dispatchTakePictureIntent());
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Error loading camera...", Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            File file = createImageFile();
+            if (file != null) {
+                FileOutputStream fout;
+                try {
+                    fout = new FileOutputStream(file);
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 70, fout);
+                    fout.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Uri uri=Uri.fromFile(file);
+                final  String emailKey =  email;
+                final  String randomKey =  UUID.randomUUID().toString();
+                StorageReference riverRef = storageReference.child(emailKey+"/"+randomKey);
+                riverRef.putFile(uri);
+            }
+            Toast.makeText(this, "Photo saved...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public File createImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File mFileTemp = null;
+        String root= getDir("my_sub_dir", Context.MODE_PRIVATE).getAbsolutePath();
+        File myDir = new File(root + "/Img");
+        if(!myDir.exists()){
+            myDir.mkdirs();
+        }
+        try {
+            mFileTemp=File.createTempFile(imageFileName,".jpg",myDir.getAbsoluteFile());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return mFileTemp;
     }
 }
 
