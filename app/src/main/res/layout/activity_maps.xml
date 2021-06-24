@@ -72,17 +72,6 @@
      android:id="@+id/google_map"
      android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-
- <ImageView
-     android:id="@+id/PhotoTake"
-     android:layout_width="match_parent"
-     android:layout_height="184dp"
-     android:layout_alignParentRight="true"
-     android:layout_marginTop="1dp"
-     android:layout_marginRight="181dp"
-     android:scaleType="centerCrop" />
-
-
 </LinearLayout>
 
 

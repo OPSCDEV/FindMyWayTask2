@@ -125,7 +125,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         profile = findViewById(R.id.ic_profile);
         favorite = findViewById(R.id.ic_fav_location);
         Camera = findViewById(R.id.ic_camera);
-        CamerPhoto = findViewById(R.id.PhotoTake);
         getLatLng = new GetLatLng();
         referencePref = FirebaseDatabase.getInstance().getReference("User_Pref");
 
