@@ -154,7 +154,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             }else{
                 if(preflandmark.equals("Popular")){
                     String[] placeTypeList = new String[]{"restaurant", "cafe","bar"};
-                    String[] placeNameList = new String[]{"Restaurant", "Cafe","Bars"};
+                    String[] placeNameList = new String[]{"Restaurants","Cafes","Bars"};
                     spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                     GetPlaces(placeTypeList);
                 }
@@ -332,14 +332,13 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 double lat = Double.parseDouble(hashMap.get("lat"));
                 double lng = Double.parseDouble(hashMap.get("lng"));
                 String name = hashMap.get("name");
-                String businessStatus = hashMap.get("business_status");
                 String rating = hashMap.get("rating");
 
                 LatLng latLng = new LatLng(lat, lng);
                 MarkerOptions options = new MarkerOptions();
                 options.position(latLng);
                 options.title(name);
-                options.snippet(businessStatus +"; Rating: "+ rating);
+                options.snippet("Rating: "+ rating);
                 map.addMarker(options);
 
                 map.setOnMarkerClickListener(marker -> {
@@ -428,6 +427,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             Toast.makeText(this, "Error loading camera...", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
