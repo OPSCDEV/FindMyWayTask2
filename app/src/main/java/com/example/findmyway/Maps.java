@@ -147,8 +147,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             GetPlaces(placeTypeList);
         }else{
             if(preflandmark.equals("Modern")){
-                String[] placeTypeList = new String[]{"landmark", "tourist_attraction"};
-                String[] placeNameList = new String[]{"Landmarks", "Tourist Attractions"};
+                String[] placeTypeList = new String[]{"landmark","tourist_attraction"};
+                String[] placeNameList = new String[]{"Landmarks","Tourist Attractions"};
                 spType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
                 GetPlaces(placeTypeList);
             }else{
@@ -332,13 +332,11 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 double lat = Double.parseDouble(hashMap.get("lat"));
                 double lng = Double.parseDouble(hashMap.get("lng"));
                 String name = hashMap.get("name");
-                String rating = hashMap.get("rating");
 
                 LatLng latLng = new LatLng(lat, lng);
                 MarkerOptions options = new MarkerOptions();
                 options.position(latLng);
                 options.title(name);
-                options.snippet("Rating: "+ rating);
                 map.addMarker(options);
 
                 map.setOnMarkerClickListener(marker -> {
