@@ -297,7 +297,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
             map.clear();
             for (int i = 0; i < hashMaps.size(); i++) {
-
                 HashMap<String, String> hashMap = hashMaps.get(i);
                 double lat = Double.parseDouble(hashMap.get("lat"));
                 double lng = Double.parseDouble(hashMap.get("lng"));
@@ -323,7 +322,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     getLatLng.setName(marker.getTitle());
                     return true;
                 });
-
             }
         }
     }

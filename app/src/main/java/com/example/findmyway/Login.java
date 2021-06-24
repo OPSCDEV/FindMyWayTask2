@@ -101,8 +101,6 @@ public class Login extends AppCompatActivity {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(Login.this, "Not successful", Toast.LENGTH_SHORT).show();
                                 } else {
-
-                                    //Checks if user records exist
                                     reference.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {

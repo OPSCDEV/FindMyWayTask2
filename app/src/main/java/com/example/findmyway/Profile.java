@@ -31,7 +31,7 @@ public class Profile extends AppCompatActivity {
     EditText Uaddress,Fname;
     TextView  lanPref, disPref,landpreftxt, unitpreftxt;
     Spinner landPref, unitPref;
-    Button edit, save;
+    Button edit, save, Back;
     DatabaseReference referenceUser,referencePref,FavPref;
     Intent intent;
     Spinner Flocation;
@@ -55,6 +55,7 @@ public class Profile extends AppCompatActivity {
 
          edit = findViewById(R.id.btEdit);
          save = findViewById(R.id.btSave);
+         Back = findViewById(R.id.btBack);
          landpreftxt = findViewById(R.id.txtlPref);
          unitpreftxt = findViewById(R.id.txtDis);
          String uid = FirebaseAuth.getInstance().getUid();
@@ -71,8 +72,10 @@ public class Profile extends AppCompatActivity {
 
         getUserDetails(stringifyEmail);
         getUserPref(stringifyEmail);
+        BackToMaps(email);
         landPref.setVisibility(View.INVISIBLE);
         unitPref.setVisibility(View.INVISIBLE);
+
         FavPref.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,7 +130,7 @@ public class Profile extends AppCompatActivity {
 
                     Fname.setEnabled(false);
                     Uaddress.setEnabled(false);
-                    Flocation.setEnabled(false);
+                    Flocation.setEnabled(true);
                 }
             }
 
@@ -173,23 +176,41 @@ public class Profile extends AppCompatActivity {
         referencePref.child(a).child("prefDistance").setValue(unitPref.getItemAtPosition(unitPref.getSelectedItemPosition()).toString());
         referencePref.child(a).child("prefLandmark").setValue(landPref.getItemAtPosition(landPref.getSelectedItemPosition()).toString());
 
+        String selectedPreflandmark = landPref.getItemAtPosition(landPref.getSelectedItemPosition()).toString();
+
         landPref.setEnabled(false);
         unitPref.setEnabled(false);
         Fname.setEnabled(false);
         Uaddress.setEnabled(false);
 
-
-        TextView textView = (TextView)landPref.getSelectedView();
-        String result = textView.getText().toString();
-        Intent passSetting = new Intent(this, Maps.class);
+        Intent passSetting = new Intent(Profile.this, Maps.class);
+        passSetting.putExtra("PrefLandmark_Key",selectedPreflandmark);
         startActivity(passSetting);
-
     }
     private void EnableText(){
         Flocation.setEnabled(true);
         landPref.setEnabled(true);
         unitPref.setEnabled(true);
     }
+    private void BackToMaps(String email){
+        referencePref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot datas : snapshot.getChildren()) {
+                    prefLandmarkdb = datas.child("prefLandmark").getValue().toString();
+                    prefdistancedb = datas.child("prefDistance").getValue().toString();
 
+                    Back.setOnClickListener(v -> {
+                        Intent passSetting = new Intent(Profile.this, Maps.class);
+                        passSetting.putExtra("PrefLandmark_Key",prefLandmarkdb);
+                        startActivity(passSetting);
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
+            }
+        });
+    }
 }
