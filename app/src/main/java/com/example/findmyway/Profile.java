@@ -1,3 +1,10 @@
+// Pulling user data from the database
+// https://firebase.google.com/docs/database/unity/retrieve-data
+// 2021
+
+// Saving user Settings into the database
+// https://firebase.google.com/docs/database/admin/save-data
+// 2021
 package com.example.findmyway;
 
 import androidx.annotation.NonNull;

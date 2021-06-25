@@ -1,3 +1,6 @@
+// Saving user selected Settings into the database
+// https://firebase.google.com/docs/database/admin/save-data
+// 2021
 package com.example.findmyway;
 
 import androidx.appcompat.app.AppCompatActivity;

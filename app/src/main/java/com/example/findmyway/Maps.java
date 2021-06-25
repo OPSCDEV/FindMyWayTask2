@@ -1,3 +1,10 @@
+// Get users current Location while getting UserPermission
+//https://www.geeksforgeeks.org/how-to-get-user-location-in-android/
+// 2021
+
+// The Places, Directions, Geolocation and Maps API was used from Goggle Cloud Platforms
+//https://console.cloud.google.com/google/maps-apis/api-list?folder=&organizationId=&project=opsc7312-315616
+//2021
 package com.example.findmyway;
 
 import androidx.annotation.NonNull;
@@ -243,6 +250,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(Maps.this);
+
+
     }
 
     @Override
@@ -338,20 +347,12 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 options.position(latLng);
                 options.title(name);
                 map.addMarker(options);
+                Favorites();
 
-                map.setOnMarkerClickListener(marker -> {
-                    if(marker.isInfoWindowShown()) {
-                        marker.hideInfoWindow();
-                    } else {
-                        marker.showInfoWindow();
-                    }
-                    Log.d(TAG, "onPostExecute: "+marker.getSnippet()+"Name: "+marker.getTitle()+"Latlng: "+marker.getPosition());
-                    getLatLng.setLatlng(marker.getPosition());
-                    getLatLng.setName(marker.getTitle());
-                    return true;
-                });
             }
+
         }
+
     }
 
     private void GetPlaces(String[] placeTypeList){
@@ -363,6 +364,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
         btFind.setOnClickListener(v -> {
+
             int i = spType.getSelectedItemPosition();
 
             final Task location = fusedLocationProviderClient.getLastLocation();
@@ -396,7 +398,9 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     private void SaveFavoriteLocation(String userId){
+
         favorite.setOnClickListener(v -> {
+
             if(getLatLng.equals(null)){
                 Toast.makeText(this, "Please select a marker to save the location", Toast.LENGTH_SHORT).show();
             }else{
@@ -468,6 +472,23 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
             e1.printStackTrace();
         }
         return mFileTemp;
+    }
+    private void Favorites(){
+
+        map.setOnMarkerClickListener(marker -> {
+            if(marker.isInfoWindowShown()) {
+                marker.hideInfoWindow();
+            } else {
+                marker.showInfoWindow();
+            }
+
+            Log.d(TAG, "onPostExecute: "+marker.getSnippet()+"Name: "+marker.getTitle()+"Latlng: "+marker.getPosition());
+            getLatLng.setLatlng(marker.getPosition());
+            getLatLng.setName(marker.getTitle());
+            map.getUiSettings().setMapToolbarEnabled(true);
+            return false;
+        });
+
     }
 }
 

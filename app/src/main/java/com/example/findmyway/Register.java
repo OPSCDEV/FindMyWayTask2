@@ -1,3 +1,10 @@
+// Registering a user using Firebase and FirebaseAuth
+// https://firebase.google.com/docs/auth/android/start
+// 2021
+
+// Checking if a user already exists in the database using FirebaseAuth
+// https://firebase.google.com/docs/auth/android/start
+// 2021
 package com.example.findmyway;
 
 import androidx.appcompat.app.AppCompatActivity;

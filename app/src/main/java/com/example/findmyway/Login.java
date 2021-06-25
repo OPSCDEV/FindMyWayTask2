@@ -1,3 +1,10 @@
+// How to Login a user using Firebase and FirebaseAuth
+// https://www.freecodecamp.org/news/authenticate-users-and-save-data-in-a-database-using-firebase/
+// 2021
+
+// Checking if a user already exists in the database using FirebaseAuth
+// https://firebase.google.com/docs/auth/android/start
+// 2021
 package com.example.findmyway;
 
 import androidx.annotation.NonNull;
