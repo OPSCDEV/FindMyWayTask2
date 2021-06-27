@@ -1,4 +1,4 @@
-package com.example.findmyway;
+package com.Find.findmyway;
 
 public class User {
     String F_Name,L_Name,Address,Email;

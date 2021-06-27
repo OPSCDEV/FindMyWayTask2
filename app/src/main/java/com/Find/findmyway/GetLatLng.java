@@ -1,4 +1,4 @@
-package com.example.findmyway;
+package com.Find.findmyway;
 
 import com.google.android.gms.maps.model.LatLng;
 

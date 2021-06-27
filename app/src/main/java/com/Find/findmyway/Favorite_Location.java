@@ -1,4 +1,4 @@
-package com.example.findmyway;
+package com.Find.findmyway;
 
 public class Favorite_Location {
     String email;

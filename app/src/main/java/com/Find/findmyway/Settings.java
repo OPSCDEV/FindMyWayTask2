@@ -1,18 +1,16 @@
 // Saving user selected Settings into the database
 // https://firebase.google.com/docs/database/admin/save-data
 // 2021
-package com.example.findmyway;
+package com.Find.findmyway;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

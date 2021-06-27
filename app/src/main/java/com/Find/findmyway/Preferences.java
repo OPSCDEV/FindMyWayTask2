@@ -1,4 +1,4 @@
-package com.example.findmyway;
+package com.Find.findmyway;
 
 public class Preferences {
     String prefLandmark,prefdistance,Email;

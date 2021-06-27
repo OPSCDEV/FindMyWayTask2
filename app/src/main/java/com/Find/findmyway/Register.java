@@ -5,7 +5,7 @@
 // Checking if a user already exists in the database using FirebaseAuth
 // https://firebase.google.com/docs/auth/android/start
 // 2021
-package com.example.findmyway;
+package com.Find.findmyway;
 
 import androidx.appcompat.app.AppCompatActivity;
 
